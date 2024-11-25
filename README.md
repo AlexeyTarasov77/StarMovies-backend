@@ -16,13 +16,11 @@ If you’d like to set up the StarMovies project for development purposes, follo
 
 1. Clone the repository:
   ```bash
-  git clone https://github.com/AlexeyTarasov77/StarMovies
+  git clone https://github.com/AlexeyTarasov77/StarMovies-backend
   ```
 2. Install the dependencies:
   ```bash
-  cd StarMovies/backend
-  npm i
-  cd ../frontend
+  cd StarMovies-backend
   npm i
   ```
 3. Create and fill .env file based on .env.example
