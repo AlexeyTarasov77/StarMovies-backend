@@ -2,7 +2,7 @@
 model Actor {
   id        Int      @id @default(autoincrement()) 
   firstName String  
-  lastName  String?
+  lastName  String
   bio       String?  // биография актёра
   photoUrl  String? 
   bornDate  DateTime?

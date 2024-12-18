@@ -4,7 +4,7 @@ model Movie {
   name          String    
   synopsis      String?   // синопсис фильма
   releaseDate   DateTime  
-  runtime       Int       @default(0) 
+  runtime       Int       
   minAge        Int?      @default(0) 
   coverUrl      String?
 
