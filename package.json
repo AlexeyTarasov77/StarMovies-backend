@@ -4,7 +4,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node ./src/server.ts"
+    "prisma:seed": "ts-node ./src/seed.ts",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:del_migrations": "prisma migrate reset",
+    "start": "ts-node src/server.ts"
   },
   "keywords": [],
   "author": "",
