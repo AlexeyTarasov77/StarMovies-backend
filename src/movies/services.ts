@@ -28,11 +28,11 @@ export class MoviesService {
             return await this.moviesRepo.getOne(movieID)
         }catch (error){
             console.error("Error fetching movie:", error) 
-            return null
+            return error
         }
     }
 
-    async genresList(): Promise<IGenre> {
-        return
-    }
+    // async genresList(): Promise<IGenre> {
+    //     return
+    // }
 }
