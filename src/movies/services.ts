@@ -3,6 +3,7 @@ import { MoviesRepository } from "./repositories";
 
 
 export class MovieNotFoundError extends Error {}
+export class NotFoundError extends Error {}
 
 interface IMoviesRepo {
     list(): Promise<IMovie[]>;
@@ -27,8 +28,9 @@ export class MoviesService {
         try{
             return await this.moviesRepo.getOne(movieID)
         }catch (error){
-            console.error("Error fetching movie:", error) 
-            return error
+            if (error instanceof NotFoundError){
+                throw MovieNotFoundError
+            }
         }
     }
 

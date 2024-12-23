@@ -1,0 +1,13 @@
+model Review {
+  rating   Int      
+  comment  String?  
+
+  movieId  Int   
+  userId   Int   
+
+  createdAt DateTime @default(now()) 
+  updatedAt DateTime @updatedAt 
+  movie    Movie     @relation(fields: [movieId], references: [id]) 
+  user     User      @relation(fields: [userId], references: [id]) 
+  @@id([movieId, userId]) 
+}
