@@ -20,7 +20,14 @@ export class MoviesService {
     }
 
     async listMovies(): Promise<IMovie[]> {
-        return await this.moviesRepo.list()
+        try{
+            return await this.moviesRepo.list()
+        }catch(error){
+            if (error instanceof NotFoundError){
+                throw new MovieNotFoundError()
+            }
+        }
+        
     }
 
     async getMovie(movieID: number): Promise<IMovie> {
