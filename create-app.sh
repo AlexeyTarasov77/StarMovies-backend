@@ -1,7 +1,9 @@
-#! /bin/sh
+#! /bin/bash
 
-# Launch: ./create-app.sh <app_name>
+read -p "name: " app_name
+echo "Creating app with name=$app_name"
 
-mkdir src/$1;
-cd src/$1;
+mkdir src/$app_name;
+cd src/$app_name;
 touch container.ts handlers.ts router.ts repositories.ts services.ts
+

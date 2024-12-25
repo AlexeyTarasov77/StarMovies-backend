@@ -1,7 +1,7 @@
 model Movie {
   id            Int       @id @default(autoincrement()) 
   name          String    
-  synopsis      String?   // синопсис фильма
+  synopsis      String?
   releaseDate   DateTime  
   runtime       Int       
   minAge        Int?      @default(0) 

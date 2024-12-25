@@ -1,14 +1,4 @@
 {
-  "name": "star_movies",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prisma:seed": "ts-node ./src/seed.ts",
-    "prisma:migrate": "prisma migrate dev",
-    "prisma:del_migrations": "prisma migrate reset",
-    "start": "ts-node src/server.ts"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -21,5 +11,15 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2"
   },
-  "description": ""
+  "description": "",
+  "name": "starmovies",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prisma:seed": "ts-node ./src/seed.ts",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:del_migrations": "prisma migrate reset",
+    "start": "ts-node src/server.ts"
+  }
 }
