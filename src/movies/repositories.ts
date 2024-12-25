@@ -4,12 +4,7 @@ import { IGenre, IMovieDetails, IMovieBase } from './interfaces'
 
 export class GenresRepository {
     async list(): Promise<IGenre[]>  {
-        try{
-            return await prisma.genre.findMany({})
-        } catch(error){
-            console.error(error)
-            throw error
-        }
+        return await prisma.genre.findMany({})
     }
 }
 
@@ -69,26 +64,16 @@ const movieSelect = {
 
 export class MoviesRepository {
     async list(): Promise<IMovieDetails[]> {
-        try{
-            return await prisma.movie.findMany({
-            include: movieSelect,
+        return await prisma.movie.findMany({
+            include: movieSelect
         })
-        } catch(error){
-            console.error(error)
-            throw error
-        }
     }
     async getOne(movieID: number): Promise<IMovieDetails>{
-        try{
-            return await prisma.movie.findUnique({
-                where: { 
-                    id: movieID 
-                },
-                include: movieSelect,
-            })
-        } catch(error){
-            console.error(error)
-            throw error
-        }
+        return await prisma.movie.findUnique({
+            where: { 
+                id: movieID 
+            },
+            include: movieSelect,
+        })
     }
 }

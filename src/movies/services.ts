@@ -26,6 +26,6 @@ export class MoviesService {
     }
 
     async listGenres(): Promise<IGenre[]> {
-        return this.genresRepo.list()
+        return await this.genresRepo.list()
     }
 }
