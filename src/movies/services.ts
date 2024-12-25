@@ -1,6 +1,12 @@
 import { IGenre, IMovie } from "./interfaces";
+import { NotFoundError } from "../core/repository";
 
-export class MovieNotFoundError extends Error {}
+export class MovieNotFoundError extends Error {
+    constructor(movieId: number) {
+        super(`Movie with id ${movieId} not found`)
+    }
+}
+
 
 interface IMoviesRepo {
     list(): Promise<IMovie[]>;
@@ -8,7 +14,7 @@ interface IMoviesRepo {
 }
 
 interface IGenresRepo {
-    list(): Promise<IGenre[]>;
+    // list(): Promise<IGenre[]>;
 }
 
 export class MoviesService {
@@ -17,9 +23,19 @@ export class MoviesService {
         this.genresRepo = genresRepo
     }
 
-    async moviesList(): Promise<IMovie[]> {}
+    async listMovies(): Promise<IMovie[]> {
+        return await this.moviesRepo.list()
+    }
 
-    async getMovie(movieID: number): Promise<IMovie> {}
+    async getMovie(movieId: number): Promise<IMovie> {
+        try {
+            return await this.moviesRepo.getOne(movieId)
+        } catch (err) {
+            if (err instanceof NotFoundError) {
+                throw new MovieNotFoundError(movieId)
+            }
+            throw err
+        }
+    }
 
-    async genresList(): Promise<IGenre> {}
 }
