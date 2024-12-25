@@ -7,14 +7,7 @@ import { NotFoundErrCode } from "../prisma";
 
 export class MoviesRepository {
     async list(): Promise<IMovie[]> {
-        try{
-            return prisma.movie.findMany()  
-        }catch(error){
-            if (error instanceof NotFoundError){
-                    console.log(error)
-                    throw error
-            }
-        }                                                                                                    
+        return prisma.movie.findMany()                                                                                       
     }
 
     async getOne(movieID: number): Promise<IMovie> {
@@ -28,7 +21,7 @@ export class MoviesRepository {
             if (error instanceof Prisma.PrismaClientKnownRequestError){
                 if (error.code === NotFoundErrCode){
                     console.log(error)
-                    throw error
+                    throw NotFoundError
                 }
             }
         }
