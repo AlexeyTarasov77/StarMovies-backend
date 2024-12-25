@@ -1,6 +1,6 @@
 export interface IReview {
   rating: number;
-  comment?: string;
+  comment: string | null;
   movieId: number;
   userId: number;
   createdAt: Date;
@@ -12,11 +12,11 @@ export interface IReview {
 export interface IMovie {
   id: number;
   name: string;
-  synopsis?: string;
+  synopsis: string | null;
   releaseDate: Date;
   runtime: number;
-  minAge?: number;
-  coverUrl?: string;
+  minAge: number | null;
+  coverUrl: string | null;
   createdAt: Date;
   updatedAt: Date;
   actors?: IActor[];
@@ -35,11 +35,11 @@ export interface IGenre {
 export interface IActor {
   id: number;
   firstName: string;
-  lastName?: string;
-  bio?: string;
-  photoUrl?: string;
-  bornDate?: Date;
-  deathDate?: Date;
+  lastName: string | null;
+  bio: string | null;
+  photoUrl: string | null;
+  bornDate: Date | null;
+  deathDate: Date | null;
   countryId: number;
   country: ICountry;
   movies: IMovie[];
@@ -56,7 +56,7 @@ export interface IUser {
   id: number;
   username: string;
   email: string;
-  avatarUrl?: string;
+  avatarUrl: string | null;
   password: string;
 
   createdAt: Date;

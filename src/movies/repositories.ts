@@ -1,36 +1,34 @@
-import { IMovie,IGenre } from "./interfaces";
+import { IMovie, IGenre } from "./interfaces";
 import { prisma } from "../prisma"
 import { NotFoundError } from "../core/repository";
-import { Prisma } from "@prisma/client";
 import { NotFoundErrCode } from "../prisma";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 
 export class MoviesRepository {
     async list(): Promise<IMovie[]> {
-        return prisma.movie.findMany()                                                                                       
+        return prisma.movie.findMany()
     }
 
-    async getOne(movieID: number): Promise<IMovie> {
-        try{
+    async getOne(id: number): Promise<IMovie> {
+        try {
             return await prisma.movie.findUniqueOrThrow({
-                where: {
-                    id: movieID
-                }
+                where: { id }
             })
-        }catch(error){
-            if (error instanceof Prisma.PrismaClientKnownRequestError){
-                if (error.code === NotFoundErrCode){
-                    console.log(error)
-                    throw NotFoundError
+        } catch (error) {
+            if (error instanceof PrismaClientKnownRequestError) {
+                if (error.code === NotFoundErrCode) {
+                    throw new NotFoundError("Not found")
                 }
             }
+            throw error;
         }
     }
 }
 
 export class GenresRepository {
-    async list(): Promise<IGenre[]> {
-        return
-    }
+    // async list(): Promise<IGenre[]> {
+    //     return
+    // }
 }
 
