@@ -5,9 +5,10 @@ export interface IReview {
   userId: number;
   createdAt: Date;
   updatedAt: Date;
-  movie: IMovie;
-  user: IUser;
+  movie?: IMovie;
+  user?: IUser;
 }
+
 
 export interface IMovie {
   id: number;
@@ -26,10 +27,11 @@ export interface IMovie {
   reviews?: IReview[];
 }
 
+
 export interface IGenre {
   id: number;
   name: string;
-  movies: IMovie[];
+  movies?: IMovie[];
 }
 
 export interface IActor {
@@ -41,15 +43,15 @@ export interface IActor {
   bornDate: Date | null;
   deathDate: Date | null;
   countryId: number;
-  country: ICountry;
-  movies: IMovie[];
+  country?: ICountry;
+  movies?: IMovie[];
 }
 
 export interface ICountry {
   id: number;
   name: string;
-  movies: IMovie[];
-  actors: IActor[];
+  movies?: IMovie[];
+  actors?: IActor[];
 }
 
 export interface IUser {
@@ -61,5 +63,5 @@ export interface IUser {
 
   createdAt: Date;
   updatedAt: Date;
-  reviews: IReview[];
+  reviews?: IReview[];
 }

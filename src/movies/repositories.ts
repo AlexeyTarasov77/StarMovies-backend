@@ -1,9 +1,15 @@
 import { IMovie, IGenre } from "./interfaces";
-import { prisma } from "../prisma"
+import { prisma, NotFoundErrCode } from "../prisma"
 import { NotFoundError } from "../core/repository";
-import { NotFoundErrCode } from "../prisma";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
+
+
+export class GenresRepository {
+    async list(): Promise<IGenre[]> {
+        return await prisma.genre.findMany({})
+    }
+}
 
 export class MoviesRepository {
     async list(): Promise<IMovie[]> {
@@ -24,11 +30,5 @@ export class MoviesRepository {
             throw error;
         }
     }
-}
-
-export class GenresRepository {
-    // async list(): Promise<IGenre[]> {
-    //     return
-    // }
 }
 

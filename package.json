@@ -4,12 +4,8 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^5.22.0",
-    "@types/express": "^5.0.0",
     "express": "^4.21.1",
-    "path": "^0.12.7",
-    "prisma": "^5.22.0",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.7.2"
+    "path": "^0.12.7"
   },
   "description": "",
   "name": "starmovies",
@@ -21,5 +17,11 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:del_migrations": "prisma migrate reset",
     "start": "ts-node src/server.ts"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "prisma": "^6.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
   }
 }

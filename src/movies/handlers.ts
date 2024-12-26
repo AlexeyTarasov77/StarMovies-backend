@@ -27,4 +27,8 @@ export class MoviesHandlers {
             throw err
         }
     }
+    public listGenres = async (req: Request, res: Response): Promise<void> => {
+        const genres = await this.service.listGenres()
+        res.status(200).json(genres)
+    }
 }

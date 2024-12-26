@@ -14,13 +14,17 @@ interface IMoviesRepo {
 }
 
 interface IGenresRepo {
-    // list(): Promise<IGenre[]>;
+    list(): Promise<IGenre[]>;
 }
 
 export class MoviesService {
     constructor(public moviesRepo: IMoviesRepo, public genresRepo: IGenresRepo) {
         this.moviesRepo = moviesRepo;
         this.genresRepo = genresRepo
+    }
+
+    async listGenres(): Promise<IGenre[]> {
+        return await this.genresRepo.list()
     }
 
     async listMovies(): Promise<IMovie[]> {
@@ -37,5 +41,4 @@ export class MoviesService {
             throw err
         }
     }
-
 }
