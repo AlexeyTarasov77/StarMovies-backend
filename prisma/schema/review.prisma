@@ -1,4 +1,3 @@
-
 model Review {
   rating   Int      
   comment  String?  

@@ -9,27 +9,15 @@ export interface IReview {
   user?: IUser;
 }
 
+
 export interface IMovie {
   id: number;
   name: string;
   synopsis: string | null;
   releaseDate: Date;
-  movie?: IMovieBase;
-  user?: IUser;
-}
-
-export interface IMovieBase {
-  id: number;
-  name: string;
-  releaseDate: Date;
   runtime: number;
-}
-
-export interface IMovieDetails extends IMovieBase {
-  synopsis?: string;
-  runtime: number;
-  minAge?: number;
-  coverUrl?: string;
+  minAge: number | null;
+  coverUrl: string | null;
   createdAt: Date;
   updatedAt: Date;
   actors?: IActor[];
@@ -39,10 +27,11 @@ export interface IMovieDetails extends IMovieBase {
   reviews?: IReview[];
 }
 
+
 export interface IGenre {
   id: number;
   name: string;
-  movies?: IMovieBase[];
+  movies?: IMovie[];
 }
 
 export interface IActor {
@@ -61,7 +50,7 @@ export interface IActor {
 export interface ICountry {
   id: number;
   name: string;
-  movies?: IMovieBase[];
+  movies?: IMovie[];
   actors?: IActor[];
 }
 
@@ -74,5 +63,5 @@ export interface IUser {
 
   createdAt: Date;
   updatedAt: Date;
-  reviews: IReview[];
+  reviews?: IReview[];
 }

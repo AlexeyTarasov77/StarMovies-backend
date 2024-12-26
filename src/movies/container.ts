@@ -1,4 +1,3 @@
-
 import { MoviesHandlers } from "./handlers";
 import { GenresRepository, MoviesRepository } from "./repositories";
 import { MoviesService } from "./services";
@@ -15,4 +14,3 @@ export class Container {
 }
 
 export const container = new Container()
-

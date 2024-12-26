@@ -1,5 +1,9 @@
-import { prisma } from "../client/prismaClient"
-import { IGenre, IMovie } from './interfaces'
+import { IMovie, IGenre } from "./interfaces";
+import { prisma, NotFoundErrCode } from "../prisma"
+import { NotFoundError } from "../core/repository";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+
+
 
 export class GenresRepository {
     async list(): Promise<IGenre[]> {
@@ -7,72 +11,24 @@ export class GenresRepository {
     }
 }
 
-const actorSelect = {
-    id: true,
-    firstName: true,
-    lastName: true,
-    bio: true,
-    photoUrl: true,
-    bornDate: true,
-    deathDate: true,
-    country: {
-        select: {
-            id: true,
-            name: true,
-        },
-    },
-    movies: {
-        select: {
-            id: true,
-            name: true,
-            releaseDate: true,
-            runtime: true,
-            coverUrl: true,
-            countryOfOriginId: true,
-            createdAt: true,
-            updatedAt: true,
-        },
-    },
-}
-
-const countryOfOriginSelect = {
-    id: true,
-    name: true,
-}
-
-const reviewSelect = {
-    createdAt: true,
-    updatedAt: true,
-    rating: true,
-    comment: true,
-    movieId: true,
-    userId: true,
-}
-
-const genreSelect = {
-    id: true,
-    name: true,
-}
-
-const movieSelect = {
-    genres: { select: genreSelect },
-    actors: { select: actorSelect },
-    countryOfOrigin: { select: countryOfOriginSelect },
-    reviews: { select: reviewSelect },
-};
-
 export class MoviesRepository {
     async list(): Promise<IMovie[]> {
-        return await prisma.movie.findMany({
-            include: movieSelect
-        })
+        return prisma.movie.findMany()
     }
-    async getOne(movieID: number): Promise<IMovie> {
-        return await prisma.movie.findUnique({
-            where: {
-                id: movieID
-            },
-            include: movieSelect,
-        })
+
+    async getOne(id: number): Promise<IMovie> {
+        try {
+            return await prisma.movie.findUniqueOrThrow({
+                where: { id }
+            })
+        } catch (error) {
+            if (error instanceof PrismaClientKnownRequestError) {
+                if (error.code === NotFoundErrCode) {
+                    throw new NotFoundError("Not found")
+                }
+            }
+            throw error;
+        }
     }
 }
+
