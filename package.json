@@ -17,7 +17,7 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:del_migrations": "prisma migrate reset",
     "lint": "npx eslint src/ --fix",
-    "format": "npx prettier . --write",
+    "format": "npx prettier src/ --write",
     "start": "ts-node src/server.ts"
   },
   "devDependencies": {
