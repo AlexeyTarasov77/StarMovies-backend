@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from "@prisma/client";
 
-export const prisma = new PrismaClient()
-export const NotFoundErrCode = "P2025"
+export const prisma = new PrismaClient();
+export const NotFoundErrCode = "P2025";

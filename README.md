@@ -15,23 +15,27 @@ StarMovies is a comprehensive platform for movie enthusiasts, designed to help u
 If you’d like to set up the StarMovies project for development purposes, follow these steps:
 
 1. Clone the repository:
-  ```bash
-  git clone https://github.com/AlexeyTarasov77/StarMovies-backend
-  ```
+
+```bash
+git clone https://github.com/AlexeyTarasov77/StarMovies-backend
+```
+
 2. Install the dependencies:
-  ```bash
-  cd StarMovies-backend
-  npm i
-  ```
+
+```bash
+cd StarMovies-backend
+npm i
+```
+
 3. Create and fill .env file based on .env.example
 4. Start backend and frontend servers
-  ```bash
-  cd backend
-  npm run dev
-  cd ../frontend
-  npm run dev
-  ```
 
+```bash
+cd backend
+npm run dev
+cd ../frontend
+npm run dev
+```
 
 ## Contributing
 
@@ -54,23 +58,27 @@ StarMovies is a comprehensive platform for movie enthusiasts, designed to help u
 If you’d like to set up the StarMovies project for development purposes, follow these steps:
 
 1. Clone the repository:
-  ```bash
-  git clone https://github.com/AlexeyTarasov77/StarMovies-backend
-  ```
+
+```bash
+git clone https://github.com/AlexeyTarasov77/StarMovies-backend
+```
+
 2. Install the dependencies:
-  ```bash
-  cd StarMovies-backend
-  npm i
-  ```
+
+```bash
+cd StarMovies-backend
+npm i
+```
+
 3. Create and fill .env file based on .env.example
 4. Start backend and frontend servers
-  ```bash
-  cd backend
-  npm run dev
-  cd ../frontend
-  npm run dev
-  ```
 
+```bash
+cd backend
+npm run dev
+cd ../frontend
+npm run dev
+```
 
 ## Contributing
 
