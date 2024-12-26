@@ -1,8 +1,9 @@
-import { Router } from 'express'
-import { Container } from './container'
-import router from "../core/router"
+import { Router } from "express"
+import { container } from "./container"
 
-export const createRouter = (container: Container): Router => {
-    router.get('/genres', (req, res) => container.genresHandler.getGenres(req, res))
-    return router
-}
+
+const router = Router()
+
+router.get('/genres', container.handlers.listGenres)
+
+export default router

@@ -1,23 +1,18 @@
 
-import { Pool } from 'pg';
-import { MoviesHandlers, GenresHandler } from "./handlers";
+import { MoviesHandlers } from "./handlers";
 import { GenresRepository, MoviesRepository } from "./repositories";
-import {MoviesService, GenresService} from "./services";
+import { MoviesService } from "./services";
 
 
 export class Container {
-    moviesHandlers: MoviesHandlers;
-    genresHandler: GenresHandler;
     handlers: MoviesHandlers;
-    constructor(db: Pool) {
+    constructor() {
         const moviesRepo = new MoviesRepository();
-        const genresRepo = new GenresRepository(db);
+        const genresRepo = new GenresRepository();
         const moviesService = new MoviesService(moviesRepo, genresRepo);
-        const genresService = new GenresService(genresRepo);
         this.handlers = new MoviesHandlers(moviesService);
-        this.genresHandler = new GenresHandler(genresService);
     }
 }
 
-export const createContainer = (db: Pool) => new Container(db)
+export const container = new Container()
 
