@@ -1,7 +1,7 @@
 name: Check
 on: push 
 jobs:
-  lint:
+  lint_and_format:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
