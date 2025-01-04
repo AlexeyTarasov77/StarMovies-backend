@@ -4,6 +4,7 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^5.22.0",
+    "cors": "^2.8.5",
     "express": "^4.21.1",
     "path": "^0.12.7"
   },
@@ -19,6 +20,7 @@
     "start": "ts-node src/server.ts"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "prisma": "^6.1.0",
     "ts-node": "^10.9.2",
