@@ -1,6 +1,6 @@
 model MoviesActors {
   movieId Int
   actorId Int
-  
-  @@id([movieId, actorId]) 
+
+  @@id([movieId, actorId])
 }
