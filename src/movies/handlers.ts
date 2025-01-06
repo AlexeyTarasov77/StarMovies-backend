@@ -1,7 +1,6 @@
 import { MovieNotFoundError, MoviesService } from "./services"
 import { Request, Response } from "express"
 
-
 export class MoviesHandlers {
     constructor(public service: MoviesService) {
         this.service = service
