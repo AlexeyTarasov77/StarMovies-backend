@@ -1,10 +1,9 @@
-
-import { faker } from '@faker-js/faker';
-import { prisma } from './prisma'
+import { faker } from "@faker-js/faker";
+import { prisma } from "./prisma";
 
 async function seedDatabase() {
   try {
-    console.log('Seeding database...');
+    console.log("Seeding database...");
 
     // Создаем страны
     const countries = await Promise.all(
@@ -13,19 +12,19 @@ async function seedDatabase() {
           data: {
             name: faker.location.country(),
           },
-        })
-      )
+        }),
+      ),
     );
 
     // Создаем жанры
     const genres = await Promise.all(
-      ['Action', 'Drama', 'Comedy', 'Thriller', 'Horror'].map((genre) =>
+      ["Action", "Drama", "Comedy", "Thriller", "Horror"].map((genre) =>
         prisma.genre.create({
           data: {
             name: genre,
           },
-        })
-      )
+        }),
+      ),
     );
 
     // Создаем актеров
@@ -38,14 +37,17 @@ async function seedDatabase() {
             lastName: faker.person.lastName(),
             bio: faker.lorem.paragraph(),
             photoUrl: faker.image.avatar(),
-            bornDate: faker.date.past({ years: 50, refDate: new Date('2000-01-01') }),
+            bornDate: faker.date.past({
+              years: 50,
+              refDate: new Date("2000-01-01"),
+            }),
             deathDate: faker.datatype.boolean()
-              ? faker.date.past({ years: 20, refDate: new Date('2020-01-01') })
+              ? faker.date.past({ years: 20, refDate: new Date("2020-01-01") })
               : null,
             countryId: country.id,
           },
         });
-      })
+      }),
     );
 
     // Создаем фильмы
@@ -72,7 +74,7 @@ async function seedDatabase() {
             },
           },
         });
-      })
+      }),
     );
 
     // Создаем пользователей
@@ -85,8 +87,8 @@ async function seedDatabase() {
             avatarUrl: faker.image.avatar(),
             password: faker.internet.password(),
           },
-        })
-      )
+        }),
+      ),
     );
 
     // Создаем отзывы
@@ -103,12 +105,12 @@ async function seedDatabase() {
             userId: user.id,
           },
         });
-      })
+      }),
     );
 
-    console.log('Seeding completed successfully!');
+    console.log("Seeding completed successfully!");
   } catch (error) {
-    console.error('Error seeding database:', error);
+    console.error("Error seeding database:", error);
   } finally {
     await prisma.$disconnect();
   }
