@@ -9,7 +9,6 @@ export interface IReview {
   user?: IUser;
 }
 
-
 export interface IMovie {
   id: number;
   name: string;
@@ -26,7 +25,6 @@ export interface IMovie {
   countryOfOrigin?: ICountry;
   reviews?: IReview[];
 }
-
 
 export interface IGenre {
   id: number;

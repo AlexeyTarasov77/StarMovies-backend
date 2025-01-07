@@ -1,0 +1,20 @@
+name: Check
+on: push 
+permissions:
+  contents: write
+jobs:
+  lint_and_format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: install dependencies
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: format 
+        run: npm run format
+      - name: Commit formatting changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Make code formatting
