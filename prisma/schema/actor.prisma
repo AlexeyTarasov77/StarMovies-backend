@@ -10,5 +10,5 @@ model Actor {
   countryId Int   
 
   country   Country  @relation(fields: [countryId], references: [id])
-  movies    Movie[]  @relation("MoviesActors") 
+  movies    Movie[]  
 }
