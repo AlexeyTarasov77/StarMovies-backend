@@ -20,7 +20,7 @@ export interface IMovie {
   createdAt: Date;
   updatedAt: Date;
   actors?: IActor[];
-  genres?: IGenre[];
+  genres?: string[];
   countryOfOriginId: number;
   countryOfOrigin?: ICountry;
   reviews?: IReview[];
