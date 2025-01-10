@@ -11,12 +11,14 @@ export class GenresRepository {
 
 export class MoviesRepository {
   async list(): Promise<IMovie[]> {
-    const movies = await prisma.movie.findMany({ include: { genres: { select: { name: true } } } });
+    const movies = await prisma.movie.findMany({
+      include: { genres: { select: { name: true } } },
+    });
     const formattedMovies: IMovie[] = movies.map((movie) => ({
       ...movie,
       genres: movie.genres.map((genre) => genre.name),
     }));
-    return formattedMovies
+    return formattedMovies;
   }
 
   async getOne(id: number): Promise<IMovie> {
