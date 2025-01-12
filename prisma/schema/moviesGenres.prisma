@@ -1,6 +1,0 @@
-model MoviesGenres {
-  movieId Int
-  genreId Int
-
-  @@id([movieId, genreId])
-}
