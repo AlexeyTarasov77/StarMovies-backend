@@ -4,3 +4,4 @@ model MoviesActors {
 
   @@id([movieId, actorId])
 }
+

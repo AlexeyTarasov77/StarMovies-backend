@@ -1,11 +1,18 @@
 import express from "express";
+import cors from "cors";
 import router from "./core/router";
 
+export const apiVersion = "1.0.0";
 const app: express.Express = express();
 const HOST = "127.0.0.1";
 const PORT = 8000;
 
-export const apiVersion = "1.0.0";
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+  }),
+);
 
 app.use("/api/v1", router);
 
