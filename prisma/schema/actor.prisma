@@ -4,7 +4,7 @@ model Actor {
   lastName  String
   bio       String?
   photoUrl  String?
-  bornDate  DateTime?
+  bornDate  DateTime? 
   deathDate DateTime?
   countryId Int
   country   Country   @relation(fields: [countryId], references: [id])

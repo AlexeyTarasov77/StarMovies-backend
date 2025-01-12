@@ -6,17 +6,17 @@ model Movie {
   runtime           Int
   minAge            Int?     @default(0)
   coverUrl          String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  createdAt         DateTime @default(now()) 
+  updatedAt         DateTime @updatedAt 
   countryOfOriginId Int
   countryOfOrigin   Country  @relation(fields: [countryOfOriginId], references: [id])
   reviews           Review[]
-  genres            Genre[]  @relation("MovieGenres")
+  genres            Genre[]  @relation("MoviesGenres")
   actors            Actor[]  @relation("MoviesActors")
 }
 
 model Genre {
   id     Int     @id @default(autoincrement())
   name   String
-  movies Movie[] @relation("MovieGenres")
+  movies Movie[] @relation("MoviesGenres")
 }
