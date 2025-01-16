@@ -1,13 +1,32 @@
-import { IMovie, IGenre } from "./interfaces";
+import { IMovie, IGenre, IActor, ICountry, IReview } from "./interfaces";
 import { prisma, NotFoundErrCode } from "../prisma";
 import { NotFoundError } from "../core/repository";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 export class GenresRepository {
-  async list(): Promise<IGenre[]> {
-    return await prisma.genre.findMany({});
+    async list(): Promise<IGenre[]> {
+        return await prisma.genre.findMany({})
   }
-}
+}       
+export class ActorsRepository {
+    async list(): Promise<IActor[]> {
+        return await prisma.actor.findMany({})
+  }
+}     
+
+export class CountryRepository {
+    async countryOfOrigin(id: number): Promise<ICountry> {
+        return await prisma.country.findUniqueOrThrow({
+            where: { id }
+        });
+  }
+}     
+
+export class ReviewsRepository {
+    async list(): Promise<IReview[]> {
+        return await prisma.review.findMany({})
+  }
+}     
 
 export class MoviesRepository {
   async list(): Promise<IMovie[]> {
