@@ -17,17 +17,16 @@ interface IGenresRepo {
 }
 
 interface IActorsRepo {
-    list(): Promise<IActor[]>;
+  list(): Promise<IActor[]>;
 }
 
 interface IReviewsRepo {
-    list(): Promise<IReview[]>;
+  list(): Promise<IReview[]>;
 }
 
 interface ICountryRepo {
-    countryOfOrigin(id: number): Promise<ICountry>;
+  countryOfOrigin(id: number): Promise<ICountry>;
 }
-
 
 export class MoviesService {
   constructor(
@@ -35,7 +34,7 @@ export class MoviesService {
     public genresRepo: IGenresRepo,
     public actorsRepo: IActorsRepo,
     public reviewsRepo: IReviewsRepo,
-    public countryRepo: ICountryRepo
+    public countryRepo: ICountryRepo,
   ) {
     this.moviesRepo = moviesRepo;
     this.genresRepo = genresRepo;
@@ -55,8 +54,8 @@ export class MoviesService {
     return await this.reviewsRepo.list();
   }
 
-  async countryOfOrigin(countryOfOriginId: number): Promise<ICountry>{
-    return await this.countryRepo.countryOfOrigin(countryOfOriginId)
+  async countryOfOrigin(countryOfOriginId: number): Promise<ICountry> {
+    return await this.countryRepo.countryOfOrigin(countryOfOriginId);
   }
 
   async listMovies(): Promise<IMovie[]> {

@@ -36,13 +36,17 @@ export class MoviesHandlers {
     res.status(200).json(actors);
   };
 
-  public countryOfOrigin = async (req: Request, res: Response): Promise<void> => {
-    const countryOfOriginId = parseInt(req.params.id)
-    const countryOfOrigin = await this.service.countryOfOrigin(countryOfOriginId);
-    res.status(200).json(countryOfOrigin)
-  }
-  
-public listReviews = async (req: Request, res: Response): Promise<void> => {
+  public countryOfOrigin = async (
+    req: Request,
+    res: Response,
+  ): Promise<void> => {
+    const countryOfOriginId = parseInt(req.params.id);
+    const countryOfOrigin =
+      await this.service.countryOfOrigin(countryOfOriginId);
+    res.status(200).json(countryOfOrigin);
+  };
+
+  public listReviews = async (req: Request, res: Response): Promise<void> => {
     const reviews = await this.service.listReviews();
     res.status(200).json(reviews);
   };
