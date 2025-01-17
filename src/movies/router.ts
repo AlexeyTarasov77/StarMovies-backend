@@ -7,7 +7,6 @@ router.get("/all", container.handlers.listMovies);
 router.get("/:id", container.handlers.getOne);
 router.get("/genres/all", container.handlers.listGenres);
 router.get("/actors/all", container.handlers.listActors);
-router.get("/countries/all", container.handlers.countryOfOrigin);
 router.get("/reviews/all", container.handlers.listReviews);
 
 export default router;

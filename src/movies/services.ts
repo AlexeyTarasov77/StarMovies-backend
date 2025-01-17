@@ -24,9 +24,6 @@ interface IReviewsRepo {
     list(): Promise<IReview[]>;
 }
 
-interface ICountryRepo {
-    countryOfOrigin(id: number): Promise<ICountry>;
-}
 
 
 export class MoviesService {
@@ -35,13 +32,11 @@ export class MoviesService {
     public genresRepo: IGenresRepo,
     public actorsRepo: IActorsRepo,
     public reviewsRepo: IReviewsRepo,
-    public countryRepo: ICountryRepo
   ) {
     this.moviesRepo = moviesRepo;
     this.genresRepo = genresRepo;
     this.actorsRepo = actorsRepo;
     this.reviewsRepo = reviewsRepo;
-    this.countryRepo = countryRepo;
   }
 
   async listGenres(): Promise<IGenre[]> {
@@ -53,10 +48,6 @@ export class MoviesService {
 
   async listReviews(): Promise<IReview[]> {
     return await this.reviewsRepo.list();
-  }
-
-  async countryOfOrigin(countryOfOriginId: number): Promise<ICountry>{
-    return await this.countryRepo.countryOfOrigin(countryOfOriginId)
   }
 
   async listMovies(): Promise<IMovie[]> {
