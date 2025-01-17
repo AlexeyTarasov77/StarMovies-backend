@@ -6,7 +6,10 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 export class GenresRepository {
   async list(): Promise<IGenre[]> {
     return await prisma.genre.findMany({});
+  async list(): Promise<IGenre[]> {
+    return await prisma.genre.findMany({});
   }
+}
 }
 export class ActorsRepository {
   async list(): Promise<IActor[]> {
@@ -16,7 +19,10 @@ export class ActorsRepository {
 export class ReviewsRepository {
   async list(): Promise<IReview[]> {
     return await prisma.review.findMany({});
+  async list(): Promise<IReview[]> {
+    return await prisma.review.findMany({});
   }
+}
 }
 
 export class MoviesRepository {

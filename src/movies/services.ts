@@ -17,11 +17,11 @@ interface IGenresRepo {
 }
 
 interface IActorsRepo {
-    list(): Promise<IActor[]>;
+  list(): Promise<IActor[]>;
 }
 
 interface IReviewsRepo {
-    list(): Promise<IReview[]>;
+  list(): Promise<IReview[]>;
 }
 
 
