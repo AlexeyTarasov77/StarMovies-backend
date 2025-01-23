@@ -6,7 +6,7 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 export class GenresRepository {
   async list(): Promise<IGenre[]> {
     return await prisma.genre.findMany({});
-}
+  }
 }
 export class ActorsRepository {
   async list(): Promise<IActor[]> {
@@ -16,22 +16,81 @@ export class ActorsRepository {
 export class ReviewsRepository {
   async list(): Promise<IReview[]> {
     return await prisma.review.findMany({});
-}
+  }
 }
 
 export class MoviesRepository {
   async list(): Promise<IMovie[]> {
     const movies = await prisma.movie.findMany({
       include: {
-        genres: { select: { name: true } },
+        genres: { select: { id: true, name: true } },
+        actors: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            bio: true,
+            photoUrl: true,
+            bornDate: true,
+            deathDate: true,
+            countryId: true,
+          },
+        },
+        reviews: {
+          select: {
+            rating: true,
+            comment: true,
+            movieId: true,
+            userId: true,
+            createdAt: true,
+            updatedAt: true,
+            user: {
+              select: {
+                id: true,
+                username: true,
+                email: true,
+                password: true,
+                avatarUrl: true,
+                createdAt: true,
+                updatedAt: true,
+              },
+            },
+          },
+        },
         countryOfOrigin: { select: { id: true, name: true } },
       },
     });
     const formattedMovies: IMovie[] = movies.map((movie) => ({
       ...movie,
-      genres: movie.genres.map((genre) => genre.name),
-      countryOfOriginId: movie.countryOfOrigin.id,
+      genres: movie.genres.map((genre) => ({
+        id: genre.id,
+        name: genre.name,
+      })),
+      actors: movie.actors.map((actor) => ({
+        id: actor.id,
+        firstName: actor.firstName,
+        lastName: actor.lastName,
+        bio: actor.bio,
+        photoUrl: actor.photoUrl,
+        bornDate: actor.bornDate,
+        deathDate: actor.deathDate,
+        countryId: actor.countryId,
+      })),
+      reviews: movie.reviews.map((review) => ({
+        rating: review.rating,
+        comment: review.comment,
+        movieId: review.movieId,
+        userId: review.userId,
+        createdAt: review.createdAt,
+        updatedAt: review.updatedAt,
+        user: review.user,
+      })),
+      countryOfOrigin: {
+        id: movie.countryOfOrigin.id,
+        name: movie.countryOfOrigin.name,
+      },
     }));
+    console.log(formattedMovies);
     return formattedMovies;
   }
 
@@ -39,6 +98,7 @@ export class MoviesRepository {
     try {
       return await prisma.movie.findUniqueOrThrow({
         where: { id },
+        include: { countryOfOrigin: true, genres: true, actors: true, reviews: true },
       });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {

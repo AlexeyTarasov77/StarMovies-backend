@@ -19,8 +19,8 @@ export interface IMovie {
   coverUrl: string | null;
   createdAt: Date;
   updatedAt: Date;
+  genres?: IGenre[];
   actors?: IActor[];
-  genres?: string[];
   countryOfOriginId: number;
   countryOfOrigin?: ICountry;
   reviews?: IReview[];
