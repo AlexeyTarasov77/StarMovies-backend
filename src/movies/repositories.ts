@@ -60,38 +60,7 @@ export class MoviesRepository {
         countryOfOrigin: { select: { id: true, name: true } },
       },
     });
-    const formattedMovies: IMovie[] = movies.map((movie) => ({
-      ...movie,
-      genres: movie.genres.map((genre) => ({
-        id: genre.id,
-        name: genre.name,
-      })),
-      actors: movie.actors.map((actor) => ({
-        id: actor.id,
-        firstName: actor.firstName,
-        lastName: actor.lastName,
-        bio: actor.bio,
-        photoUrl: actor.photoUrl,
-        bornDate: actor.bornDate,
-        deathDate: actor.deathDate,
-        countryId: actor.countryId,
-      })),
-      reviews: movie.reviews.map((review) => ({
-        rating: review.rating,
-        comment: review.comment,
-        movieId: review.movieId,
-        userId: review.userId,
-        createdAt: review.createdAt,
-        updatedAt: review.updatedAt,
-        user: review.user,
-      })),
-      countryOfOrigin: {
-        id: movie.countryOfOrigin.id,
-        name: movie.countryOfOrigin.name,
-      },
-    }));
-    console.log(formattedMovies);
-    return formattedMovies;
+    return movies;
   }
 
   async getOne(id: number): Promise<IMovie> {
