@@ -24,29 +24,19 @@ export class MoviesRepository {
     const movies = await prisma.movie.findMany({
       include: {
         genres: { select: { id: true, name: true } },
-        actors: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-          },
-        },
+        actors: { select: { id: true, firstName: true, lastName: true } },
         reviews: {
           select: {
             rating: true,
             comment: true,
             createdAt: true,
             updatedAt: true,
-            user: {
-              select: {
-                id: true,
-                username: true,
-              },
-            },
-          },
+            movieId: true,
+            user: { select: { id: true, username: true } }
+          }
         },
-        countryOfOrigin: { select: { id: true, name: true } },
-      },
+        countryOfOrigin: { select: { id: true, name: true } }
+      }
     });
     return movies;
   }
@@ -55,7 +45,7 @@ export class MoviesRepository {
     try {
       return await prisma.movie.findUniqueOrThrow({
         where: { id },
-        include: { countryOfOrigin: true, genres: true, actors: true, reviews: true },
+        include: { countryOfOrigin: true, genres: true, actors: true, reviews: true }
       });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {

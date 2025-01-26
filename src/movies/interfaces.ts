@@ -1,7 +1,7 @@
 export interface IReview {
   rating: number;
   comment: string | null;
-  movieId?: number;
+  movieId: number;
   userId?: number;
   createdAt: Date;
   updatedAt: Date;
@@ -19,10 +19,10 @@ export interface IMovie {
   coverUrl: string | null;
   createdAt?: Date;
   updatedAt?: Date;
-  genres?: IGenre[];
-  actors?: IActor[];
+  genres: IGenre[];
+  actors: IActor[];
   countryOfOriginId?: number;
-  countryOfOrigin?: ICountry;
+  countryOfOrigin: ICountry;
   reviews?: IReview[];
 }
 
