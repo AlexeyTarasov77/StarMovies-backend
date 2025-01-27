@@ -1,4 +1,4 @@
-import { IActor, ICountry, IGenre, IMovie, IReview } from "./interfaces";
+import { IActor, IGenre, IMovie, IReview } from "./interfaces";
 import { NotFoundError } from "../core/repository";
 
 export class MovieNotFoundError extends Error {

@@ -1,4 +1,4 @@
-import { IMovie, IGenre, IActor, ICountry, IReview } from "./interfaces";
+import { IMovie, IGenre, IActor, IReview } from "./interfaces";
 import { prisma, NotFoundErrCode } from "../prisma";
 import { NotFoundError } from "../core/repository";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
