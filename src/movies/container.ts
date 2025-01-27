@@ -1,5 +1,10 @@
 import { MoviesHandlers } from "./handlers";
-import { GenresRepository, MoviesRepository } from "./repositories";
+import {
+  ActorsRepository,
+  GenresRepository,
+  MoviesRepository,
+  ReviewsRepository,
+} from "./repositories";
 import { MoviesService } from "./services";
 
 export class Container {
@@ -7,7 +12,14 @@ export class Container {
   constructor() {
     const moviesRepo = new MoviesRepository();
     const genresRepo = new GenresRepository();
-    const moviesService = new MoviesService(moviesRepo, genresRepo);
+    const actorsRepo = new ActorsRepository();
+    const reviewsRepo = new ReviewsRepository();
+    const moviesService = new MoviesService(
+      moviesRepo,
+      genresRepo,
+      actorsRepo,
+      reviewsRepo,
+    );
     this.handlers = new MoviesHandlers(moviesService);
   }
 }

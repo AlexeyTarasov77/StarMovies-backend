@@ -1,7 +1,6 @@
 model Country {
-  id   Int    @id @default(autoincrement()) 
-  name String 
-
-  movies Movie[] 
-  actors Actor[] 
+  id     Int     @id @default(autoincrement())
+  name   String
+  actors Actor[]
+  movies Movie[]
 }
