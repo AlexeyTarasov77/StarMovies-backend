@@ -36,7 +36,7 @@ export class MoviesHandlers {
     res.status(200).json(actors);
   };
 
-public listReviews = async (req: Request, res: Response): Promise<void> => {
+  public listReviews = async (req: Request, res: Response): Promise<void> => {
     const reviews = await this.service.listReviews();
     res.status(200).json(reviews);
   };

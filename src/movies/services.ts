@@ -24,8 +24,6 @@ interface IReviewsRepo {
   list(): Promise<IReview[]>;
 }
 
-
-
 export class MoviesService {
   constructor(
     public moviesRepo: IMoviesRepo,

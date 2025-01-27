@@ -32,11 +32,11 @@ export class MoviesRepository {
             createdAt: true,
             updatedAt: true,
             movieId: true,
-            user: { select: { id: true, username: true } }
-          }
+            user: { select: { id: true, username: true } },
+          },
         },
-        countryOfOrigin: { select: { id: true, name: true } }
-      }
+        countryOfOrigin: { select: { id: true, name: true } },
+      },
     });
     return movies;
   }
@@ -45,7 +45,12 @@ export class MoviesRepository {
     try {
       return await prisma.movie.findUniqueOrThrow({
         where: { id },
-        include: { countryOfOrigin: true, genres: true, actors: true, reviews: true }
+        include: {
+          countryOfOrigin: true,
+          genres: true,
+          actors: true,
+          reviews: true,
+        },
       });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
