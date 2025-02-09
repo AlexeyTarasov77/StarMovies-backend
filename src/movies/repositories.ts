@@ -40,7 +40,6 @@ export class MoviesRepository {
     });
     return movies;
   }
-  
 
   async getOne(id: number): Promise<IMovie> {
     try {
@@ -67,7 +66,7 @@ export class MoviesRepository {
     const genres = await prisma.genre.findMany({
       where: {
         movies: {
-          some: { id:{ in:watchedMoviesIds}},
+          some: { id: { in: watchedMoviesIds } },
         },
       },
       select: { id: true },
@@ -76,25 +75,21 @@ export class MoviesRepository {
     // Берем только ID жанров
     const genreIds = genres.map((genre) => genre.id);
 
-    if (genreIds.length === 0) return []
+    if (genreIds.length === 0) return [];
 
     return await prisma.movie.findMany({
       where: {
         AND: [
-          { genres: 
-            { some: 
-              { id: { in: genreIds }} 
-            } 
-          },
+          { genres: { some: { id: { in: genreIds } } } },
           // Исключаем переданные фильмы, которые были переданы в recMovieIds
-          { id:{ notIn:watchedMoviesIds}}, 
+          { id: { notIn: watchedMoviesIds } },
         ],
       },
       include: {
         genres: true,
         actors: true,
         countryOfOrigin: true,
-      }
-    })
+      },
+    });
   }
 }

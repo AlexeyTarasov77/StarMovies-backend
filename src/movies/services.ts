@@ -10,7 +10,7 @@ export class MovieNotFoundError extends Error {
 interface IMoviesRepo {
   list(): Promise<IMovie[]>;
   getOne(movieID: number): Promise<IMovie>;
-  getRecommendedMovies(watchedMoviesIds: number[]): Promise<IMovie[]>; 
+  getRecommendedMovies(watchedMoviesIds: number[]): Promise<IMovie[]>;
 }
 
 interface IGenresRepo {
@@ -37,7 +37,7 @@ export class MoviesService {
     this.actorsRepo = actorsRepo;
     this.reviewsRepo = reviewsRepo;
   }
-  
+
   async listGenres(): Promise<IGenre[]> {
     return await this.genresRepo.list();
   }
@@ -65,7 +65,6 @@ export class MoviesService {
   }
 
   async getRecommendedMovies(watchedMoviesIds: number[]): Promise<IMovie[]> {
-    return await this.moviesRepo.getRecommendedMovies(watchedMoviesIds)
+    return await this.moviesRepo.getRecommendedMovies(watchedMoviesIds);
   }
-
 }
