@@ -49,7 +49,11 @@ export class MoviesRepository {
           countryOfOrigin: true,
           genres: true,
           actors: true,
-          reviews: { include: { user: { select: { avatarUrl: true, username: true, id: true } } } },
+          reviews: {
+            include: {
+              user: { select: { avatarUrl: true, username: true, id: true } },
+            },
+          },
         },
       });
     } catch (error) {
@@ -62,7 +66,9 @@ export class MoviesRepository {
     }
   }
 
-  async listRecommendedMovies(watchedMoviesIds: number[]): Promise<IMovieBanner[]> {
+  async listRecommendedMovies(
+    watchedMoviesIds: number[],
+  ): Promise<IMovieBanner[]> {
     const genres = await prisma.genre.findMany({
       where: {
         movies: {
@@ -85,7 +91,7 @@ export class MoviesRepository {
           { id: { notIn: watchedMoviesIds } },
         ],
       },
-      select: { id: true, coverUrl: true }
+      select: { id: true, coverUrl: true },
     });
   }
 }

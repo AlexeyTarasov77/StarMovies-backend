@@ -64,7 +64,9 @@ export class MoviesService {
     }
   }
 
-  async listRecommendedMovies(watchedMoviesIds: number[]): Promise<IMovieBanner[]> {
+  async listRecommendedMovies(
+    watchedMoviesIds: number[],
+  ): Promise<IMovieBanner[]> {
     return await this.moviesRepo.listRecommendedMovies(watchedMoviesIds);
   }
 }

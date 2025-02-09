@@ -41,13 +41,25 @@ export class MoviesHandlers {
     res.status(200).json(reviews);
   };
 
-  public listRecommendedMovies = async (req: Request, res: Response): Promise<void> => {
+  public listRecommendedMovies = async (
+    req: Request,
+    res: Response,
+  ): Promise<void> => {
     if (!req.query.id) {
-      res.status(400).json({ message: "Empty id param. Supply at least one movie id to get recommendations" })
-      return
+      res
+        .status(400)
+        .json({
+          message:
+            "Empty id param. Supply at least one movie id to get recommendations",
+        });
+      return;
     }
-    const moviesIds = Array.isArray(req.query.id) ? req.query.id : [req.query.id]
-    const movies = await this.service.listRecommendedMovies(moviesIds.map(Number))
-    res.status(200).json(movies)
-  }
+    const moviesIds = Array.isArray(req.query.id)
+      ? req.query.id
+      : [req.query.id];
+    const movies = await this.service.listRecommendedMovies(
+      moviesIds.map(Number),
+    );
+    res.status(200).json(movies);
+  };
 }
