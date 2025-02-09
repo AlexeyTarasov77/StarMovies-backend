@@ -61,4 +61,35 @@ export class MoviesRepository {
       throw error;
     }
   }
+
+  async getRecommendedMovies(watchedMoviesIds: number[]): Promise<IMovie[]> {
+    const genres = await prisma.genre.findMany({
+      where: {
+        movies: {
+          some: { id: { in: watchedMoviesIds } },
+        },
+      },
+      select: { id: true },
+    });
+
+    // Берем только ID жанров
+    const genreIds = genres.map((genre) => genre.id);
+
+    if (genreIds.length === 0) return [];
+
+    return await prisma.movie.findMany({
+      where: {
+        AND: [
+          { genres: { some: { id: { in: genreIds } } } },
+          // Исключаем переданные фильмы, которые были переданы в recMovieIds
+          { id: { notIn: watchedMoviesIds } },
+        ],
+      },
+      include: {
+        genres: true,
+        actors: true,
+        countryOfOrigin: true,
+      },
+    });
+  }
 }
