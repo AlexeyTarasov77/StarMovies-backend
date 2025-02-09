@@ -20,7 +20,7 @@
     "prisma:del_migrations": "prisma migrate reset",
     "lint": "npx eslint src/ --fix",
     "format": "npx prettier src/ --write",
-    "start": "ts-node src/server.ts"
+    "dev": "ts-node src/server.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

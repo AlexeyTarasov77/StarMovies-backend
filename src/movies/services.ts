@@ -1,4 +1,4 @@
-import { IActor, IGenre, IMovie, IReview } from "./interfaces";
+import { IActor, IGenre, IMovie, IMovieBanner, IReview } from "./interfaces";
 import { NotFoundError } from "../core/repository";
 
 export class MovieNotFoundError extends Error {
@@ -10,7 +10,7 @@ export class MovieNotFoundError extends Error {
 interface IMoviesRepo {
   list(): Promise<IMovie[]>;
   getOne(movieID: number): Promise<IMovie>;
-  getRecommendedMovies(watchedMoviesIds: number[]): Promise<IMovie[]>;
+  listRecommendedMovies(watchedMoviesIds: number[]): Promise<IMovieBanner[]>;
 }
 
 interface IGenresRepo {
@@ -64,7 +64,7 @@ export class MoviesService {
     }
   }
 
-  async getRecommendedMovies(watchedMoviesIds: number[]): Promise<IMovie[]> {
-    return await this.moviesRepo.getRecommendedMovies(watchedMoviesIds);
+  async listRecommendedMovies(watchedMoviesIds: number[]): Promise<IMovieBanner[]> {
+    return await this.moviesRepo.listRecommendedMovies(watchedMoviesIds);
   }
 }
