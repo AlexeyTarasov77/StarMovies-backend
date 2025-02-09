@@ -1,4 +1,4 @@
-import { IGenre, IMovie } from "./interfaces";
+import { IActor, IGenre, IMovie, IReview } from "./interfaces";
 import { NotFoundError } from "../core/repository";
 
 export class MovieNotFoundError extends Error {
@@ -10,23 +10,43 @@ export class MovieNotFoundError extends Error {
 interface IMoviesRepo {
   list(): Promise<IMovie[]>;
   getOne(movieID: number): Promise<IMovie>;
+  getRecommendedMovies(watchedMoviesIds: number[]): Promise<IMovie[]>; 
 }
 
 interface IGenresRepo {
   list(): Promise<IGenre[]>;
 }
 
+interface IActorsRepo {
+  list(): Promise<IActor[]>;
+}
+
+interface IReviewsRepo {
+  list(): Promise<IReview[]>;
+}
+
 export class MoviesService {
   constructor(
     public moviesRepo: IMoviesRepo,
     public genresRepo: IGenresRepo,
+    public actorsRepo: IActorsRepo,
+    public reviewsRepo: IReviewsRepo,
   ) {
     this.moviesRepo = moviesRepo;
     this.genresRepo = genresRepo;
+    this.actorsRepo = actorsRepo;
+    this.reviewsRepo = reviewsRepo;
   }
-
+  
   async listGenres(): Promise<IGenre[]> {
     return await this.genresRepo.list();
+  }
+  async listActors(): Promise<IActor[]> {
+    return await this.actorsRepo.list();
+  }
+
+  async listReviews(): Promise<IReview[]> {
+    return await this.reviewsRepo.list();
   }
 
   async listMovies(): Promise<IMovie[]> {
@@ -43,4 +63,9 @@ export class MoviesService {
       throw err;
     }
   }
+
+  async getRecommendedMovies(watchedMoviesIds: number[]): Promise<IMovie[]> {
+    return await this.moviesRepo.getRecommendedMovies(watchedMoviesIds)
+  }
+
 }

@@ -2,7 +2,7 @@ export interface IReview {
   rating: number;
   comment: string | null;
   movieId: number;
-  userId: number;
+  userId?: number;
   createdAt: Date;
   updatedAt: Date;
   movie?: IMovie;
@@ -17,12 +17,12 @@ export interface IMovie {
   runtime: number;
   minAge: number | null;
   coverUrl: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-  actors?: IActor[];
-  genres?: IGenre[];
-  countryOfOriginId: number;
-  countryOfOrigin?: ICountry;
+  createdAt?: Date;
+  updatedAt?: Date;
+  genres: IGenre[];
+  actors: IActor[];
+  countryOfOriginId?: number;
+  countryOfOrigin: ICountry;
   reviews?: IReview[];
 }
 
@@ -36,11 +36,11 @@ export interface IActor {
   id: number;
   firstName: string;
   lastName: string | null;
-  bio: string | null;
-  photoUrl: string | null;
-  bornDate: Date | null;
-  deathDate: Date | null;
-  countryId: number;
+  bio?: string | null;
+  photoUrl?: string | null;
+  bornDate?: Date | null;
+  deathDate?: Date | null;
+  countryId?: number;
   country?: ICountry;
   movies?: IMovie[];
 }
@@ -55,11 +55,10 @@ export interface ICountry {
 export interface IUser {
   id: number;
   username: string;
-  email: string;
-  avatarUrl: string | null;
-  password: string;
-
-  createdAt: Date;
-  updatedAt: Date;
+  email?: string;
+  avatarUrl?: string | null;
+  password?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
   reviews?: IReview[];
 }

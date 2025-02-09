@@ -1,6 +1,6 @@
 model Actor {
-  id        Int      @id @default(autoincrement()) 
-  firstName String  
+  id        Int       @id @default(autoincrement())
+  firstName String
   lastName  String
   bio       String?  // биография актёра
   photoUrl  String? 
@@ -10,5 +10,5 @@ model Actor {
   countryId Int   
 
   country   Country  @relation(fields: [countryId], references: [id])
-  movies    Movie[]  @relation("MoviesActors") 
+  movies    Movie[]  
 }

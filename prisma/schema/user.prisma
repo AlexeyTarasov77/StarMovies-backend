@@ -1,11 +1,10 @@
 model User {
   id        Int      @id @default(autoincrement())
-  username  String   @unique 
-  email     String   @unique 
-  avatarUrl String?  // URL авы пользователя 
-  password  String   
-
+  username  String   @unique
+  email     String   @unique
+  avatarUrl String?
+  password  String
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt 
-  reviews   Review[] 
+  updatedAt DateTime @updatedAt
+  reviews   Review[]
 }

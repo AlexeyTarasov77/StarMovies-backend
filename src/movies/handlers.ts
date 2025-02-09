@@ -30,4 +30,14 @@ export class MoviesHandlers {
     const genres = await this.service.listGenres();
     res.status(200).json(genres);
   };
+
+  public listActors = async (req: Request, res: Response): Promise<void> => {
+    const actors = await this.service.listActors();
+    res.status(200).json(actors);
+  };
+
+  public listReviews = async (req: Request, res: Response): Promise<void> => {
+    const reviews = await this.service.listReviews();
+    res.status(200).json(reviews);
+  };
 }
