@@ -10,7 +10,29 @@ export class GenresRepository {
 }
 export class ActorsRepository {
   async list(): Promise<IActor[]> {
-    return await prisma.actor.findMany({});
+    return await prisma.actor.findMany({
+        include: {
+            movies: {select:{
+                id: true,
+                name: true,
+                countryOfOrigin: true
+            }}
+        }
+    });
+  }
+  async getOne(id: number): Promise<IActor> {
+    try {
+      return await prisma.actor.findUniqueOrThrow({
+        where: { id }
+      });
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === NotFoundErrCode) {
+          throw new NotFoundError("Not found");
+        }
+      }
+      throw error;
+    }
   }
 }
 export class ReviewsRepository {
@@ -32,7 +54,7 @@ export class MoviesRepository {
             createdAt: true,
             updatedAt: true,
             movieId: true,
-            user: { select: { id: true, username: true } }
+            user: { select: { id: true, username: true, avatarUrl: true } }
           }
         },
         countryOfOrigin: { select: { id: true, name: true } }

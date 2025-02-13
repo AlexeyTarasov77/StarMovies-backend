@@ -12,15 +12,15 @@ export interface IReview {
 export interface IMovie {
   id: number;
   name: string;
-  synopsis: string | null;
-  releaseDate: Date;
-  runtime: number;
-  minAge: number | null;
-  coverUrl: string | null;
+  synopsis?: string | null;
+  releaseDate?: Date;
+  runtime?: number;
+  minAge?: number | null;
+  coverUrl?: string | null;
   createdAt?: Date;
   updatedAt?: Date;
-  genres: IGenre[];
-  actors: IActor[];
+  genres?: IGenre[];
+  actors?: IActor[];
   countryOfOriginId?: number;
   countryOfOrigin: ICountry;
   reviews?: IReview[];
