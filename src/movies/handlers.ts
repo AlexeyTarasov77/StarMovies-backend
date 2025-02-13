@@ -36,14 +36,14 @@ export class MoviesHandlers {
     res.status(200).json(actors);
   };
   public getActor = async (req: Request, res: Response): Promise<void> => {
-    const movieId = parseInt(req.params.id);
-    if (isNaN(movieId)) {
+    const actorId = parseInt(req.params.id);
+    if (isNaN(actorId)) {
       res.status(400).json({ message: "Invalid movie`s id" });
       return;
     }
     try {
-      const movie = await this.service.getMovie(movieId);
-      res.status(200).json(movie);
+      const actor = await this.service.getActor(actorId);
+      res.status(200).json(actor);
     } catch (err) {
       if (err instanceof MovieNotFoundError) {
         res.status(404).json({ message: err.message });
