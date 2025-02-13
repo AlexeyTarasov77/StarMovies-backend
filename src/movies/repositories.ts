@@ -1,4 +1,4 @@
-import { IMovie, IGenre, IActor, ICountry, IReview } from "./interfaces";
+import { IMovie, IGenre, IActor, IReview } from "./interfaces";
 import { prisma, NotFoundErrCode } from "../prisma";
 import { NotFoundError } from "../core/repository";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
@@ -57,8 +57,8 @@ export class MoviesRepository {
             user: { select: { id: true, username: true, avatarUrl: true } }
           }
         },
-        countryOfOrigin: { select: { id: true, name: true } }
-      }
+        countryOfOrigin: { select: { id: true, name: true } },
+      },
     });
     return movies;
   }
@@ -67,7 +67,12 @@ export class MoviesRepository {
     try {
       return await prisma.movie.findUniqueOrThrow({
         where: { id },
-        include: { countryOfOrigin: true, genres: true, actors: true, reviews: true }
+        include: {
+          countryOfOrigin: true,
+          genres: true,
+          actors: true,
+          reviews: true,
+        },
       });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
