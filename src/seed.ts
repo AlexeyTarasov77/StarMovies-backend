@@ -1,3 +1,4 @@
+
 import { faker } from "@faker-js/faker";
 import { prisma } from "./prisma";
 
@@ -64,6 +65,7 @@ async function seedDatabase() {
             releaseDate: faker.date.past({ years: 30 }),
             runtime: faker.number.int({ min: 80, max: 180 }),
             minAge: faker.number.int({ min: 0, max: 18 }),
+            // rating: faker.number.int({ min: 1, max: 10 }),
             coverUrl: faker.image.url(),
             countryOfOriginId: country.id,
             genres: {

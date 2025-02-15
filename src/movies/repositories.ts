@@ -1,7 +1,9 @@
 import { IMovie, IGenre, IActor, IReview } from "./interfaces";
 import { prisma, NotFoundErrCode } from "../prisma";
 import { NotFoundError } from "../core/repository";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import {
+  PrismaClientKnownRequestError,
+} from "@prisma/client/runtime/library";
 
 export class GenresRepository {
   async list(): Promise<IGenre[]> {
@@ -19,6 +21,7 @@ export class ActorsRepository {
             countryOfOrigin: true,
           },
         },
+        country: { select: { id: true, name: true } },
       },
     });
   }
@@ -26,6 +29,7 @@ export class ActorsRepository {
     try {
       return await prisma.actor.findUniqueOrThrow({
         where: { id },
+        include: { country: true },
       });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
@@ -48,7 +52,9 @@ export class MoviesRepository {
     const movies = await prisma.movie.findMany({
       include: {
         genres: { select: { id: true, name: true } },
-        actors: { select: { id: true, firstName: true, lastName: true } },
+        actors: {
+          select: { id: true, firstName: true, lastName: true, country: true },
+        },
         reviews: {
           select: {
             rating: true,
@@ -67,7 +73,7 @@ export class MoviesRepository {
 
   async getOne(id: number): Promise<IMovie> {
     try {
-      return await prisma.movie.findUniqueOrThrow({
+      return await prisma.movie.findFirstOrThrow({
         where: { id },
         include: {
           countryOfOrigin: true,
