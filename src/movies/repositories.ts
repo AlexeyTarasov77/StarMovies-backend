@@ -1,9 +1,7 @@
 import { IMovie, IGenre, IActor, IReview } from "./interfaces";
 import { prisma, NotFoundErrCode } from "../prisma";
 import { NotFoundError } from "../core/repository";
-import {
-  PrismaClientKnownRequestError,
-} from "@prisma/client/runtime/library";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 export class GenresRepository {
   async list(): Promise<IGenre[]> {
