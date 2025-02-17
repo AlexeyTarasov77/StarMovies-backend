@@ -16,7 +16,10 @@ export class ActorsRepository {
           select: {
             id: true,
             name: true,
+            coverUrl: true,
+            minAge: true,
             countryOfOrigin: true,
+            releaseDate: true,
           },
         },
         country: { select: { id: true, name: true } },
@@ -27,7 +30,19 @@ export class ActorsRepository {
     try {
       return await prisma.actor.findUniqueOrThrow({
         where: { id },
-        include: { country: true },
+        include: {
+          country: true,
+          movies: {
+            select: {
+              id: true,
+              name: true,
+              minAge: true,
+              coverUrl: true,
+              countryOfOrigin: true,
+              releaseDate: true,
+            },
+          },
+        },
       });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
