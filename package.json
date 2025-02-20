@@ -6,8 +6,9 @@
     "@faker-js/faker": "^9.3.0",
     "@prisma/client": "^6.2.0",
     "cors": "^2.8.5",
-    "express": "^4.21.2",
-    "path": "^0.12.7"
+    "express": "^5.0.1",
+    "path": "^0.12.7",
+    "zod": "^3.24.2"
   },
   "description": "",
   "name": "starmovies",
@@ -20,7 +21,7 @@
     "prisma:del_migrations": "prisma migrate reset",
     "lint": "npx eslint src/ --fix",
     "format": "npx prettier src/ --write",
-    "dev": "ts-node --env-file=.env.local src/server.ts"
+    "dev": "node -r ts-node/register --env-file=.env src/server.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

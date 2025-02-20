@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import router from "./core/router";
+import { errorHandler } from "./core/http-errors";
 
 export const apiVersion = "1.0.0";
 const app: express.Express = express();
@@ -15,6 +16,7 @@ app.use(
 );
 
 app.use("/api/v1", router);
+app.use(errorHandler)
 
 app.listen(PORT, HOST, () => {
   console.log(`Server is running on http://${HOST}:${PORT}`);
