@@ -21,7 +21,7 @@ export class UserService {
   }
 
   async authRegister(data: IUser) {
-    const user = await this.userRepo.getOne(data.email);
+    const user = await this.userRepo.createOne(data);
 
     if (user) {
       return { status: "error", message: "user exists" };
