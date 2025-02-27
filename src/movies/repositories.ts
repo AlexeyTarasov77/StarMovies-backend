@@ -1,4 +1,4 @@
-import { IMovie, IGenre, IActor, IReview } from "./interfaces";
+import { IMovie, IMovieBanner, IGenre, IActor, IReview } from "./interfaces";
 import { prisma, NotFoundErrCode } from "../prisma";
 import { NotFoundError } from "../core/repository";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
@@ -92,7 +92,11 @@ export class MoviesRepository {
           countryOfOrigin: true,
           genres: true,
           actors: true,
-          reviews: true,
+          reviews: {
+            include: {
+              user: { select: { avatarUrl: true, username: true, id: true } },
+            },
+          },
         },
       });
     } catch (error) {
@@ -103,5 +107,34 @@ export class MoviesRepository {
       }
       throw error;
     }
+  }
+
+  async listRecommendedMovies(
+    watchedMoviesIds: number[],
+  ): Promise<IMovieBanner[]> {
+    const genres = await prisma.genre.findMany({
+      where: {
+        movies: {
+          some: { id: { in: watchedMoviesIds } },
+        },
+      },
+      select: { id: true },
+    });
+
+    // Берем только ID жанров
+    const genreIds = genres.map((genre) => genre.id);
+
+    if (!genreIds.length) return [];
+
+    return await prisma.movie.findMany({
+      where: {
+        AND: [
+          { genres: { some: { id: { in: genreIds } } } },
+          // Исключаем переданные фильмы, которые были переданы в recMovieIds
+          { id: { notIn: watchedMoviesIds } },
+        ],
+      },
+      select: { id: true, coverUrl: true },
+    });
   }
 }

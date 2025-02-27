@@ -19,6 +19,7 @@ model Movie {
   countryOfOrigin Country @relation(fields: [countryOfOriginId], references: [id])
   
   reviews       Review[]  
+  favouriteForUsers User[]
 }
 
 model Genre {

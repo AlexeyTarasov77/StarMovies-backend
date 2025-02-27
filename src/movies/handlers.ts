@@ -1,5 +1,7 @@
+import { HTTPNotFoundError } from "../core/http-errors";
+import { validateObjectId } from "../core/validation";
 import { MovieNotFoundError, MoviesService } from "./services";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 
 export class MoviesHandlers {
   constructor(public service: MoviesService) {
@@ -9,19 +11,14 @@ export class MoviesHandlers {
     const movies = await this.service.listMovies();
     res.status(200).json(movies);
   };
-  public getMovie = async (req: Request, res: Response): Promise<void> => {
-    const movieId = parseInt(req.params.id);
-    if (isNaN(movieId)) {
-      res.status(400).json({ message: "Invalid movie`s id" });
-      return;
-    }
+  public getOne = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const movieId = validateObjectId(req.params.id)
     try {
       const movie = await this.service.getMovie(movieId);
       res.status(200).json(movie);
     } catch (err) {
       if (err instanceof MovieNotFoundError) {
-        res.status(404).json({ message: err.message });
-        return;
+        throw new HTTPNotFoundError(err.message)
       }
       throw err;
     }
@@ -56,5 +53,27 @@ export class MoviesHandlers {
   public listReviews = async (req: Request, res: Response): Promise<void> => {
     const reviews = await this.service.listReviews();
     res.status(200).json(reviews);
+  };
+
+  public listRecommendedMovies = async (
+    req: Request,
+    res: Response,
+  ): Promise<void> => {
+    if (!req.query.id) {
+      res
+        .status(400)
+        .json({
+          message:
+            "Empty id param. Supply at least one movie id to get recommendations",
+        });
+      return;
+    }
+    const moviesIds = Array.isArray(req.query.id)
+      ? req.query.id
+      : [req.query.id];
+    const movies = await this.service.listRecommendedMovies(
+      moviesIds.map(Number),
+    );
+    res.status(200).json(movies);
   };
 }

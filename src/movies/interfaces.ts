@@ -9,14 +9,16 @@ export interface IReview {
   user?: IUser;
 }
 
-export interface IMovie {
+export interface IMovieBanner {
   id: number;
+  coverUrl: string | null;
+}
+export interface IMovie extends IMovieBanner {
   name: string;
-  synopsis?: string | null;
-  releaseDate?: Date;
-  runtime?: number;
-  minAge?: number | null;
-  coverUrl?: string | null;
+  synopsis: string | null;
+  releaseDate: Date;
+  runtime: number;
+  minAge: number | null;
   createdAt?: Date;
   updatedAt?: Date;
   //   rating: number;
