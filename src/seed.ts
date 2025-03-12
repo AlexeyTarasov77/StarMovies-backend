@@ -22,6 +22,7 @@ async function seedDatabase() {
         prisma.genre.create({
           data: {
             name: genre,
+            description: faker.lorem.paragraph()
           },
         }),
       ),

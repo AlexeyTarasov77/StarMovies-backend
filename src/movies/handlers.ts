@@ -11,14 +11,18 @@ export class MoviesHandlers {
     const movies = await this.service.listMovies();
     res.status(200).json(movies);
   };
-  public getOne = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const movieId = validateObjectId(req.params.id)
+  public getOne = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    const movieId = validateObjectId(req.params.id);
     try {
       const movie = await this.service.getMovie(movieId);
       res.status(200).json(movie);
     } catch (err) {
       if (err instanceof MovieNotFoundError) {
-        throw new HTTPNotFoundError(err.message)
+        throw new HTTPNotFoundError(err.message);
       }
       throw err;
     }
@@ -60,12 +64,10 @@ export class MoviesHandlers {
     res: Response,
   ): Promise<void> => {
     if (!req.query.id) {
-      res
-        .status(400)
-        .json({
-          message:
-            "Empty id param. Supply at least one movie id to get recommendations",
-        });
+      res.status(400).json({
+        message:
+          "Empty id param. Supply at least one movie id to get recommendations",
+      });
       return;
     }
     const moviesIds = Array.isArray(req.query.id)

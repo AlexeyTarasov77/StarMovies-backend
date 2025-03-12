@@ -2,13 +2,13 @@ model Actor {
   id        Int       @id @default(autoincrement())
   firstName String
   lastName  String
-  bio       String?  // биография актёра
-  photoUrl  String? 
+  bio       String? // биография актёра
+  photoUrl  String?
   bornDate  DateTime?
-  deathDate DateTime? 
+  deathDate DateTime?
 
-  countryId Int   
+  countryId Int
 
-  country   Country  @relation(fields: [countryId], references: [id])
-  movies    Movie[]  
+  country Country @relation(fields: [countryId], references: [id])
+  movies  Movie[]
 }

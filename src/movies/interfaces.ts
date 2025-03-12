@@ -32,6 +32,7 @@ export interface IMovie extends IMovieBanner {
 export interface IGenre {
   id: number;
   name: string;
+  description: string;
   movies?: IMovie[];
 }
 

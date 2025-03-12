@@ -7,6 +7,7 @@ export class GenresRepository {
   async list(): Promise<IGenre[]> {
     return await prisma.genre.findMany({});
   }
+//   asyn getOne():
 }
 export class ActorsRepository {
   async list(): Promise<IActor[]> {
@@ -24,7 +25,7 @@ export class ActorsRepository {
             createdAt: true,
             updatedAt: true,
             runtime: true,
-            synopsis: true
+            synopsis: true,
           },
         },
         country: { select: { id: true, name: true } },
@@ -39,17 +40,17 @@ export class ActorsRepository {
           country: true,
           movies: {
             select: {
-                id: true,
-                name: true,
-                coverUrl: true,
-                minAge: true,
-                countryOfOrigin: true,
-                countryOfOriginId: true,
-                releaseDate: true,
-                createdAt: true,
-                updatedAt: true,
-                runtime: true,
-                synopsis: true
+              id: true,
+              name: true,
+              coverUrl: true,
+              minAge: true,
+              countryOfOrigin: true,
+              countryOfOriginId: true,
+              releaseDate: true,
+              createdAt: true,
+              updatedAt: true,
+              runtime: true,
+              synopsis: true,
             },
           },
         },
@@ -74,7 +75,7 @@ export class MoviesRepository {
   async list(): Promise<IMovie[]> {
     const movies = await prisma.movie.findMany({
       include: {
-        genres: { select: { id: true, name: true } },
+        genres: { select: { id: true, name: true, description: true } },
         actors: {
           select: { id: true, firstName: true, lastName: true, country: true },
         },
