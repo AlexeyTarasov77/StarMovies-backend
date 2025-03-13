@@ -13,6 +13,12 @@ export class ActorNotFoundError extends Error {
   }
 }
 
+export class GenreNotFoundError extends Error {
+  constructor(genreId: number) {
+    super(`Genge with id ${genreId} not found`);
+  }
+}
+
 interface IMoviesRepo {
   list(): Promise<IMovie[]>;
   getOne(movieID: number): Promise<IMovie>;
@@ -21,6 +27,7 @@ interface IMoviesRepo {
 
 interface IGenresRepo {
   list(): Promise<IGenre[]>;
+  getOne(genreId: number): Promise<IGenre>;
 }
 
 interface IActorsRepo {
@@ -48,6 +55,18 @@ export class MoviesService {
   async listGenres(): Promise<IGenre[]> {
     return await this.genresRepo.list();
   }
+
+  async getGenre(genreId: number): Promise<IGenre> {
+    try {
+      return await this.genresRepo.getOne(genreId);
+    } catch (err) {
+      if (err instanceof NotFoundError) {
+        throw new GenreNotFoundError(genreId);
+      }
+      throw err;
+    }
+  }
+
   async listActors(): Promise<IActor[]> {
     return await this.actorsRepo.list();
   }
@@ -57,7 +76,7 @@ export class MoviesService {
       return await this.actorsRepo.getOne(actorId);
     } catch (err) {
       if (err instanceof NotFoundError) {
-        throw new MovieNotFoundError(actorId);
+        throw new ActorNotFoundError(actorId);
       }
       throw err;
     }

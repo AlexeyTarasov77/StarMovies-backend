@@ -1,6 +1,6 @@
 import { HTTPNotFoundError } from "../core/http-errors";
 import { validateObjectId } from "../core/validation";
-import { MovieNotFoundError, MoviesService } from "./services";
+import { ActorNotFoundError, GenreNotFoundError, MovieNotFoundError, MoviesService } from "./services";
 import { NextFunction, Request, Response } from "express";
 
 export class MoviesHandlers {
@@ -32,6 +32,24 @@ export class MoviesHandlers {
     res.status(200).json(genres);
   };
 
+  public getGenre = async (req: Request, res: Response): Promise<void> => {
+    const genreId = parseInt(req.params.id);
+    if (isNaN(genreId)) {
+      res.status(400).json({ message: "Invalid genre`s id" });
+      return;
+    }
+    try {
+      const genre = await this.service.getGenre(genreId);
+      res.status(200).json(genre);
+    } catch (err) {
+      if (err instanceof GenreNotFoundError) {
+        res.status(404).json({ message: err.message });
+        return;
+      }
+      throw err;
+    }
+  };
+
   public listActors = async (req: Request, res: Response): Promise<void> => {
     const actors = await this.service.listActors();
     res.status(200).json(actors);
@@ -39,14 +57,14 @@ export class MoviesHandlers {
   public getActor = async (req: Request, res: Response): Promise<void> => {
     const actorId = parseInt(req.params.id);
     if (isNaN(actorId)) {
-      res.status(400).json({ message: "Invalid movie`s id" });
+      res.status(400).json({ message: "Invalid actor`s id" });
       return;
     }
     try {
       const actor = await this.service.getActor(actorId);
       res.status(200).json(actor);
     } catch (err) {
-      if (err instanceof MovieNotFoundError) {
+      if (err instanceof ActorNotFoundError) {
         res.status(404).json({ message: err.message });
         return;
       }

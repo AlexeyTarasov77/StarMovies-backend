@@ -7,7 +7,13 @@ export class GenresRepository {
   async list(): Promise<IGenre[]> {
     return await prisma.genre.findMany({});
   }
-//   asyn getOne():
+  async getOne(id: number): Promise<IGenre>{
+    return await prisma.genre.findUniqueOrThrow({
+        where:{
+            id: id
+        }
+    })
+  }
 }
 export class ActorsRepository {
   async list(): Promise<IActor[]> {
