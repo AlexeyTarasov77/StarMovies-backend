@@ -33,11 +33,7 @@ export class MoviesHandlers {
   };
 
   public getGenre = async (req: Request, res: Response): Promise<void> => {
-    const genreId = parseInt(req.params.id);
-    if (isNaN(genreId)) {
-      res.status(400).json({ message: "Invalid genre`s id" });
-      return;
-    }
+    const genreId = validateObjectId(req.params.id);
     try {
       const genre = await this.service.getGenre(genreId);
       res.status(200).json(genre);
@@ -55,11 +51,7 @@ export class MoviesHandlers {
     res.status(200).json(actors);
   };
   public getActor = async (req: Request, res: Response): Promise<void> => {
-    const actorId = parseInt(req.params.id);
-    if (isNaN(actorId)) {
-      res.status(400).json({ message: "Invalid actor`s id" });
-      return;
-    }
+    const actorId = validateObjectId(req.params.id);
     try {
       const actor = await this.service.getActor(actorId);
       res.status(200).json(actor);

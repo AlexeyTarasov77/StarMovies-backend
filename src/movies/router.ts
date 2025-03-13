@@ -12,4 +12,7 @@ router.get("/actors/all", container.handlers.listActors);
 router.get("/actors/:id", container.handlers.getActor);
 router.get("/reviews/all", container.handlers.listReviews);
 
+// router.post("/new/genre")
+// router.post("/update/post")
+
 export default router;

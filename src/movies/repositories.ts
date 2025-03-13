@@ -14,6 +14,11 @@ export class GenresRepository {
         }
     })
   }
+
+//   async addOne(): Promise<IGenre>{
+
+//   } 
+
 }
 export class ActorsRepository {
   async list(): Promise<IActor[]> {
