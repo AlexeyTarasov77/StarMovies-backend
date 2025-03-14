@@ -2,6 +2,7 @@ import { IMovie, IMovieBanner, IGenre, IActor, IReview } from "./interfaces";
 import { prisma, NotFoundErrCode } from "../prisma";
 import { NotFoundError } from "../core/repository";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { Prisma } from "@prisma/client";
 
 export class GenresRepository {
   async list(): Promise<IGenre[]> {
@@ -15,9 +16,34 @@ export class GenresRepository {
     })
   }
 
-//   async addOne(): Promise<IGenre>{
+  async createOne(data: Prisma.GenreCreateInput): Promise<IGenre>{
+    return await prisma.genre.create({
+        data: data
+    })
+  } 
 
-//   } 
+  async updateOne(id: number, data: Prisma.GenreUpdateInput): Promise<IGenre>{
+    const currentGenre = await prisma.genre.findUniqueOrThrow({
+        where: {
+            id: id
+        }
+    })
+    if (!currentGenre){
+        throw new NotFoundError("Not found");
+    }
+
+    if (currentGenre !== data){
+        return await prisma.genre.update({
+            where: {
+                id: currentGenre.id,
+            },
+            data
+        }) 
+    }else{
+        return currentGenre
+    }
+
+  }
 
 }
 export class ActorsRepository {

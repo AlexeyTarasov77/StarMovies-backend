@@ -1,6 +1,11 @@
 import { HTTPNotFoundError } from "../core/http-errors";
 import { validateObjectId } from "../core/validation";
-import { ActorNotFoundError, GenreNotFoundError, MovieNotFoundError, MoviesService } from "./services";
+import {
+  ActorNotFoundError,
+  GenreNotFoundError,
+  MovieNotFoundError,
+  MoviesService,
+} from "./services";
 import { NextFunction, Request, Response } from "express";
 
 export class MoviesHandlers {
@@ -36,6 +41,30 @@ export class MoviesHandlers {
     const genreId = validateObjectId(req.params.id);
     try {
       const genre = await this.service.getGenre(genreId);
+      res.status(200).json(genre);
+    } catch (err) {
+      if (err instanceof GenreNotFoundError) {
+        res.status(404).json({ message: err.message });
+        return;
+      }
+      throw err;
+    }
+  };
+  public createGenre = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const genre = await this.service.createOne(req.body);
+      res.status(200).json(genre);
+    } catch (err) {
+      if (err instanceof GenreNotFoundError) {
+        res.status(404).json({ message: err.message });
+        return;
+      }
+      throw err;
+    }
+  };
+  public updateGenre = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const genre = await this.service.updateGenre(req.body, Number(req.params.id));
       res.status(200).json(genre);
     } catch (err) {
       if (err instanceof GenreNotFoundError) {

@@ -1,5 +1,6 @@
 import { IActor, IGenre, IMovie, IMovieBanner, IReview } from "./interfaces";
 import { NotFoundError } from "../core/repository";
+import { Prisma } from "@prisma/client";
 
 export class MovieNotFoundError extends Error {
   constructor(movieId: number) {
@@ -28,6 +29,8 @@ interface IMoviesRepo {
 interface IGenresRepo {
   list(): Promise<IGenre[]>;
   getOne(genreId: number): Promise<IGenre>;
+  createOne(data: Prisma.GenreCreateInput): Promise<IGenre>;
+  updateOne(genreId: number, data: Prisma.GenreUpdateInput): Promise<IGenre>;
 }
 
 interface IActorsRepo {
@@ -66,6 +69,12 @@ export class MoviesService {
       throw err;
     }
   }
+  async createOne(data: Prisma.GenreCreateInput): Promise<IGenre>{
+    return await this.genresRepo.createOne(data);
+  }
+  async updateGenre(data: Prisma.GenreUpdateInput, genreId: number): Promise<IGenre> {
+    return await this.genresRepo.updateOne(genreId, data);
+}
 
   async listActors(): Promise<IActor[]> {
     return await this.actorsRepo.list();
