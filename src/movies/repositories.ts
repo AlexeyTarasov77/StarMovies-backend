@@ -5,184 +5,196 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { Prisma } from "@prisma/client";
 
 export class GenresRepository {
-  async list(): Promise<IGenre[]> {
-    return await prisma.genre.findMany({});
-  }
-  async getOne(id: number): Promise<IGenre>{
-    return await prisma.genre.findUniqueOrThrow({
-        where:{
-            id: id
-        }
-    })
-  }
-
-  async createOne(data: Prisma.GenreCreateInput): Promise<IGenre>{
-    return await prisma.genre.create({
-        data: data
-    })
-  } 
-
-  async updateOne(id: number, data: Prisma.GenreUpdateInput): Promise<IGenre>{
-    const currentGenre = await prisma.genre.findUniqueOrThrow({
-        where: {
-            id: id
-        }
-    })
-    if (!currentGenre){
-        throw new NotFoundError("Not found");
+    async list(): Promise<IGenre[]> {
+        return await prisma.genre.findMany({});
+    }
+    async getOne(id: number): Promise<IGenre> {
+        return await prisma.genre.findUniqueOrThrow({
+            where: {
+                id: id,
+            },
+        });
     }
 
-    if (currentGenre !== data){
-        return await prisma.genre.update({
+    async createOne(data: Prisma.GenreCreateInput): Promise<IGenre> {
+        return await prisma.genre.create({
+            data: data,
+        });
+    }
+
+    async updateOne(
+        id: number,
+        data: Prisma.GenreUpdateInput,
+    ): Promise<IGenre> {
+        const currentGenre = await prisma.genre.findUniqueOrThrow({
+            where: {
+                id: id,
+            },
+        });
+
+        const updateGenre = await prisma.genre.update({
             where: {
                 id: currentGenre.id,
             },
-            data
-        }) 
-    }else{
-        return currentGenre
+            data,
+        });
+        return updateGenre;
     }
-
-  }
-
 }
 export class ActorsRepository {
-  async list(): Promise<IActor[]> {
-    return await prisma.actor.findMany({
-      include: {
-        movies: {
-          select: {
-            id: true,
-            name: true,
-            coverUrl: true,
-            minAge: true,
-            countryOfOrigin: true,
-            countryOfOriginId: true,
-            releaseDate: true,
-            createdAt: true,
-            updatedAt: true,
-            runtime: true,
-            synopsis: true,
-          },
-        },
-        country: { select: { id: true, name: true } },
-      },
-    });
-  }
-  async getOne(id: number): Promise<IActor> {
-    try {
-      return await prisma.actor.findUniqueOrThrow({
-        where: { id },
-        include: {
-          country: true,
-          movies: {
-            select: {
-              id: true,
-              name: true,
-              coverUrl: true,
-              minAge: true,
-              countryOfOrigin: true,
-              countryOfOriginId: true,
-              releaseDate: true,
-              createdAt: true,
-              updatedAt: true,
-              runtime: true,
-              synopsis: true,
+    async list(): Promise<IActor[]> {
+        return await prisma.actor.findMany({
+            include: {
+                movies: {
+                    select: {
+                        id: true,
+                        name: true,
+                        coverUrl: true,
+                        minAge: true,
+                        countryOfOrigin: true,
+                        countryOfOriginId: true,
+                        releaseDate: true,
+                        createdAt: true,
+                        updatedAt: true,
+                        runtime: true,
+                        synopsis: true,
+                    },
+                },
+                country: { select: { id: true, name: true } },
             },
-          },
-        },
-      });
-    } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === NotFoundErrCode) {
-          throw new NotFoundError("Not found");
-        }
-      }
-      throw error;
+        });
     }
-  }
+    async getOne(id: number): Promise<IActor> {
+        try {
+            return await prisma.actor.findUniqueOrThrow({
+                where: { id },
+                include: {
+                    country: true,
+                    movies: {
+                        select: {
+                            id: true,
+                            name: true,
+                            coverUrl: true,
+                            minAge: true,
+                            countryOfOrigin: true,
+                            countryOfOriginId: true,
+                            releaseDate: true,
+                            createdAt: true,
+                            updatedAt: true,
+                            runtime: true,
+                            synopsis: true,
+                        },
+                    },
+                },
+            });
+        } catch (error) {
+            if (error instanceof PrismaClientKnownRequestError) {
+                if (error.code === NotFoundErrCode) {
+                    throw new NotFoundError("Not found");
+                }
+            }
+            throw error;
+        }
+    }
 }
 export class ReviewsRepository {
-  async list(): Promise<IReview[]> {
-    return await prisma.review.findMany({});
-  }
+    async list(): Promise<IReview[]> {
+        return await prisma.review.findMany({});
+    }
 }
 
 export class MoviesRepository {
-  async list(): Promise<IMovie[]> {
-    const movies = await prisma.movie.findMany({
-      include: {
-        genres: { select: { id: true, name: true, description: true } },
-        actors: {
-          select: { id: true, firstName: true, lastName: true, country: true },
-        },
-        reviews: {
-          select: {
-            rating: true,
-            comment: true,
-            createdAt: true,
-            updatedAt: true,
-            movieId: true,
-            user: { select: { id: true, username: true, avatarUrl: true } },
-          },
-        },
-        countryOfOrigin: { select: { id: true, name: true } },
-      },
-    });
-    return movies;
-  }
-
-  async getOne(id: number): Promise<IMovie> {
-    try {
-      return await prisma.movie.findFirstOrThrow({
-        where: { id },
-        include: {
-          countryOfOrigin: true,
-          genres: true,
-          actors: true,
-          reviews: {
+    async list(): Promise<IMovie[]> {
+        const movies = await prisma.movie.findMany({
             include: {
-              user: { select: { avatarUrl: true, username: true, id: true } },
+                genres: { select: { id: true, name: true, description: true } },
+                actors: {
+                    select: {
+                        id: true,
+                        firstName: true,
+                        lastName: true,
+                        country: true,
+                    },
+                },
+                reviews: {
+                    select: {
+                        rating: true,
+                        comment: true,
+                        createdAt: true,
+                        updatedAt: true,
+                        movieId: true,
+                        user: {
+                            select: {
+                                id: true,
+                                username: true,
+                                avatarUrl: true,
+                            },
+                        },
+                    },
+                },
+                countryOfOrigin: { select: { id: true, name: true } },
             },
-          },
-        },
-      });
-    } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === NotFoundErrCode) {
-          throw new NotFoundError("Not found");
-        }
-      }
-      throw error;
+        });
+        return movies;
     }
-  }
 
-  async listRecommendedMovies(
-    watchedMoviesIds: number[],
-  ): Promise<IMovieBanner[]> {
-    const genres = await prisma.genre.findMany({
-      where: {
-        movies: {
-          some: { id: { in: watchedMoviesIds } },
-        },
-      },
-      select: { id: true },
-    });
+    async getOne(id: number): Promise<IMovie> {
+        try {
+            return await prisma.movie.findFirstOrThrow({
+                where: { id },
+                include: {
+                    countryOfOrigin: true,
+                    genres: true,
+                    actors: true,
+                    reviews: {
+                        include: {
+                            user: {
+                                select: {
+                                    avatarUrl: true,
+                                    username: true,
+                                    id: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            });
+        } catch (error) {
+            if (error instanceof PrismaClientKnownRequestError) {
+                if (error.code === NotFoundErrCode) {
+                    throw new NotFoundError("Not found");
+                }
+            }
+            throw error;
+        }
+    }
 
-    // Берем только ID жанров
-    const genreIds = genres.map((genre) => genre.id);
+    async listRecommendedMovies(
+        watchedMoviesIds: number[],
+    ): Promise<IMovieBanner[]> {
+        const genres = await prisma.genre.findMany({
+            where: {
+                movies: {
+                    some: { id: { in: watchedMoviesIds } },
+                },
+            },
+            select: { id: true },
+        });
 
-    if (!genreIds.length) return [];
+        // Берем только ID жанров
+        const genreIds = genres.map((genre) => genre.id);
 
-    return await prisma.movie.findMany({
-      where: {
-        AND: [
-          { genres: { some: { id: { in: genreIds } } } },
-          // Исключаем переданные фильмы, которые были переданы в recMovieIds
-          { id: { notIn: watchedMoviesIds } },
-        ],
-      },
-      select: { id: true, coverUrl: true },
-    });
-  }
+        if (!genreIds.length) return [];
+
+        return await prisma.movie.findMany({
+            where: {
+                AND: [
+                    { genres: { some: { id: { in: genreIds } } } },
+                    // Исключаем переданные фильмы, которые были переданы в recMovieIds
+                    { id: { notIn: watchedMoviesIds } },
+                ],
+            },
+            select: { id: true, coverUrl: true },
+        });
+    }
 }
