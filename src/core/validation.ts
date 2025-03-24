@@ -19,6 +19,7 @@ export function validateObjectId(id: string): number {
   return validateSchema(schema, id)
 }
 
-export function validateRequest<T extends AnyZodObject>(req: Request, schema: T, location: "params" | "body" | "query" = "body"): z.infer<T> {
+export function validateRequest<T extends AnyZodObject>(req: Request, schema: T,
+  location: "params" | "body" | "query" = "body"): z.infer<T> {
   return validateSchema(schema, req[location])
 }

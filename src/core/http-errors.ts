@@ -17,6 +17,12 @@ export class HTTPNotFoundError extends HTTPError {
   }
 }
 
+export class HTTPBadRequestError extends HTTPError {
+  constructor(message?: string) {
+    super(400, message || "Bad request")
+  }
+}
+
 export class HTTPValidationError extends HTTPError {
   constructor(public errors: SchemaValidationErrors, message?: string) {
     super(422, message || "Validation error")
@@ -44,6 +50,7 @@ export class HTTPValidationError extends HTTPError {
 
 export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
   let body: { success: false, message: string, errors?: SchemaValidationErrors } = { success: false, message: err.message }
+  console.log("Error: ", err)
   if (err instanceof HTTPError) {
     if (err instanceof HTTPValidationError) {
       body.errors = err.errors
