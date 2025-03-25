@@ -2,6 +2,7 @@ import { hash } from "bcryptjs";
 import { sign } from "jsonwebtoken";
 import { IUser } from "../movies/interfaces";
 import { NotFoundError } from "../core/repository";
+import { Prisma } from "@prisma/client";
 
 export class UserNotFoundError extends Error {
     constructor(userId: number) {
@@ -18,7 +19,7 @@ export class UserAlreadyExist extends Error {
 interface IUsersRepo {
     list(): Promise<IUser[]>;
     getOne(userId: number): Promise<IUser>;
-    //   createOne(data: {}): Promise<IUser>;
+    createOne(data: Prisma.UserCreateInput): Promise<IUser>;
 }
 
 export class UsersService {
@@ -39,6 +40,16 @@ export class UsersService {
             }
             throw err;
         }
+    }
+    async createUser(data: Prisma.UserCreateInput): Promise<IUser> {
+        const hashedPassword = await hash(data.password, 10);
+
+        const hashedUserData = {
+            ...data,
+            password: hashedPassword,
+        };
+
+        return await this.usersRepo.createOne(hashedUserData);
     }
 
     //   async authRegister(data: IUser) {

@@ -17,9 +17,16 @@ export class GenresRepository {
     }
 
     async createOne(data: Prisma.GenreCreateInput): Promise<IGenre> {
-        return await prisma.genre.create({
-            data: data,
-        });
+        try {
+            return await prisma.genre.create({
+                data: data,
+            });
+        } catch (error) {
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                if (error.code === NotFoundErrCode) throw new NotFoundError();
+            }
+            throw error;
+        }
     }
 
     async updateOne(

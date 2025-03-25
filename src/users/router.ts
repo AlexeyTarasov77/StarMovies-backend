@@ -7,4 +7,6 @@ const router = Router();
 router.get("/all", container.handlers.listUsers);
 router.get("/:id", container.handlers.getUser);
 
+router.post("/user/new", container.handlers.createUser)
+
 export default router;
