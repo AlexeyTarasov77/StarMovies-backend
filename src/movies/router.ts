@@ -13,6 +13,6 @@ router.get("/actors/:id", container.handlers.getActor);
 router.get("/reviews/all", container.handlers.listReviews);
 
 router.post("/genre/new", container.handlers.createGenre);
-router.post("/genre/update/:id", container.handlers.updateGenre);
+// router.post("/genre/update/:id", container.handlers.updateGenre);
 
 export default router;

@@ -2,10 +2,23 @@ import { IActor, IGenre, IMovie, IMovieBanner, IReview, IMoviesRepo, IGenresRepo
 import { NotFoundError } from "../core/repository";
 import { ListMoviesQuery } from "./schemas";
 import { SortOrder } from "../core/types";
+import { Prisma } from "@prisma/client";
 
 export class MovieNotFoundError extends Error {
     constructor(movieId: number) {
         super(`Movie with id ${movieId} not found`);
+    }
+}
+
+export class ActorNotFoundError extends Error {
+    constructor(actorId: number) {
+        super(`Actor with id ${actorId} not found`);
+    }
+}
+
+export class GenreNotFoundError extends Error {
+    constructor(genreId: number) {
+        super(`Genge with id ${genreId} not found`);
     }
 }
 
@@ -39,12 +52,12 @@ export class MoviesService {
     async createOne(data: Prisma.GenreCreateInput): Promise<IGenre> {
         return await this.genresRepo.createOne(data);
     }
-    async updateGenre(
-        data: Prisma.GenreUpdateInput,
-        genreId: number,
-    ): Promise<IGenre> {
-        return await this.genresRepo.updateOne(genreId, data);
-    }
+    // async updateGenre(
+    //     data: Prisma.GenreUpdateInput,
+    //     genreId: number,
+    // ): Promise<IGenre> {
+    //     return await this.genresRepo.updateOne(genreId, data);
+    // }
 
     async listActors(): Promise<IActor[]> {
         return await this.actorsRepo.list();

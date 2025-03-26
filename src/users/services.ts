@@ -1,6 +1,6 @@
 import { hash } from "bcryptjs";
 import { sign } from "jsonwebtoken";
-import { IUser } from "../movies/interfaces";
+import { IUser, IUsersRepo } from "./types";
 import { NotFoundError } from "../core/repository";
 import { Prisma } from "@prisma/client";
 
@@ -16,11 +16,6 @@ export class UserAlreadyExist extends Error {
     }
 }
 
-interface IUsersRepo {
-    list(): Promise<IUser[]>;
-    getOne(userId: number): Promise<IUser>;
-    createOne(data: Prisma.UserCreateInput): Promise<IUser>;
-}
 
 export class UsersService {
     constructor(public usersRepo: IUsersRepo) {

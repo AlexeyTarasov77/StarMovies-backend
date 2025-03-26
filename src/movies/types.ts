@@ -1,4 +1,6 @@
+import { Prisma } from "@prisma/client";
 import { SortOrder } from "../core/types";
+import { IUser } from "../users/types";
 
 export interface IReview {
     rating: number;
@@ -34,7 +36,7 @@ export interface IMovie extends IMovieBanner {
 export interface IGenre {
     id: number;
     name: string;
-    description: string;
+    description?: string | null;
     movies?: IMovie[];
 }
 
@@ -58,37 +60,33 @@ export interface ICountry {
     actors?: IActor[];
 }
 
-export interface IUser {
-    id: number;
-    username: string;
-    email?: string;
-    avatarUrl?: string | null;
-    password?: string;
-    createdAt?: Date;
-    updatedAt?: Date;
-    reviews?: IReview[];
-}
-
 
 export interface IMoviesRepo {
-  list(limit?: number): Promise<IMovie[]>;
-  getOne(movieID: number): Promise<IMovie>;
-  listByGenresExcludeByIds(
-    genresIds: number[], excludeMoviesIds: number[]
-  ): Promise<IMovieBanner[]>
-  listOrderedByPopulatiry(direction: SortOrder, limit?: number): Promise<IMovieBanner[]>
+    list(limit?: number): Promise<IMovie[]>;
+    getOne(movieID: number): Promise<IMovie>;
+    listByGenresExcludeByIds(
+        genresIds: number[],
+        excludeMoviesIds: number[],
+    ): Promise<IMovieBanner[]>;
+    listOrderedByPopulatiry(
+        direction: SortOrder,
+        limit?: number,
+    ): Promise<IMovieBanner[]>;
 }
 
 export interface IGenresRepo {
-  listIdsForMovies(moviesIds: number[]): Promise<number[]>
-  list(): Promise<IGenre[]>;
+    listIdsForMovies(moviesIds: number[]): Promise<number[]>;
+    list(): Promise<IGenre[]>;
+    getOne(genreId: number): Promise<IGenre>;
+    createOne(data: Prisma.GenreCreateInput): Promise<IGenre>;
+    // updateOne(genreId: number, data: Prisma.GenreUpdateInput): Promise<IGenre>;
 }
 
 export interface IActorsRepo {
-  list(): Promise<IActor[]>;
+    list(): Promise<IActor[]>;
+    getOne(actorID: number): Promise<IActor>;
 }
 
 export interface IReviewsRepo {
-  list(): Promise<IReview[]>;
+    list(): Promise<IReview[]>;
 }
-
