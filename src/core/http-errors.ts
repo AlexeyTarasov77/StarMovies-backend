@@ -12,9 +12,15 @@ export class HTTPError extends Error {
 }
 
 export class HTTPNotFoundError extends HTTPError {
-    constructor(message?: string) {
-        super(404, message || "Not found");
-    }
+  constructor(message?: string) {
+    super(404, message || "Not found")
+  }
+}
+
+export class HTTPBadRequestError extends HTTPError {
+  constructor(message?: string) {
+    super(400, message || "Bad request")
+  }
 }
 
 export class HTTPValidationError extends HTTPError {
@@ -47,23 +53,16 @@ export class HTTPValidationError extends HTTPError {
     }
 }
 
-export const errorHandler = (
-    err: Error,
-    req: Request,
-    res: Response,
-    next: NextFunction,
-) => {
-    let body: {
-        success: false;
-        message: string;
-        errors?: SchemaValidationErrors;
-    } = { success: false, message: err.message };
-    if (err instanceof HTTPError) {
-        if (err instanceof HTTPValidationError) {
-            body.errors = err.errors;
-        }
-        res.status(err.status).json(body);
-        return;
+export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
+  let body: { success: false, message: string, errors?: SchemaValidationErrors } = { success: false, message: err.message }
+  console.log("Error: ", err)
+  if (err instanceof HTTPError) {
+    if (err instanceof HTTPValidationError) {
+      body.errors = err.errors
     }
-    res.status(500).json({ ...body, message: "Unexpected server error" });
-};
+    res.status(err.status).json(body)
+    return;
+  }
+  res.status(500).json({ ...body, message: "Unexpected server error" })
+}
+

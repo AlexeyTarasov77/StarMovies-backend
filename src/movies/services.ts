@@ -1,45 +1,12 @@
-import { IActor, IGenre, IMovie, IMovieBanner, IReview } from "./interfaces";
+import { IActor, IGenre, IMovie, IMovieBanner, IReview, IMoviesRepo, IGenresRepo, IActorsRepo, IReviewsRepo } from "./types";
 import { NotFoundError } from "../core/repository";
-import { Prisma } from "@prisma/client";
+import { ListMoviesQuery } from "./schemas";
+import { SortOrder } from "../core/types";
 
 export class MovieNotFoundError extends Error {
     constructor(movieId: number) {
         super(`Movie with id ${movieId} not found`);
     }
-}
-
-export class ActorNotFoundError extends Error {
-    constructor(actorId: number) {
-        super(`Actor with id ${actorId} not found`);
-    }
-}
-
-export class GenreNotFoundError extends Error {
-    constructor(genreId: number) {
-        super(`Genge with id ${genreId} not found`);
-    }
-}
-
-interface IMoviesRepo {
-    list(): Promise<IMovie[]>;
-    getOne(movieID: number): Promise<IMovie>;
-    listRecommendedMovies(watchedMoviesIds: number[]): Promise<IMovieBanner[]>;
-}
-
-interface IGenresRepo {
-    list(): Promise<IGenre[]>;
-    getOne(genreId: number): Promise<IGenre>;
-    createOne(data: Prisma.GenreCreateInput): Promise<IGenre>;
-    updateOne(genreId: number, data: Prisma.GenreUpdateInput): Promise<IGenre>;
-}
-
-interface IActorsRepo {
-    list(): Promise<IActor[]>;
-    getOne(actorID: number): Promise<IActor>;
-}
-
-interface IReviewsRepo {
-    list(): Promise<IReview[]>;
 }
 
 export class MoviesService {
@@ -98,9 +65,11 @@ export class MoviesService {
         return await this.reviewsRepo.list();
     }
 
-    async listMovies(): Promise<IMovie[]> {
-        return await this.moviesRepo.list();
-    }
+  async listMovies(dto: ListMoviesQuery): Promise<IMovie[] | IMovieBanner[]> {
+    if (dto.filters.includes("mostPopular"))
+      return await this.moviesRepo.listOrderedByPopulatiry(SortOrder.DESC, dto.limit)
+    return await this.moviesRepo.list(dto.limit);
+  }
 
     async getMovie(movieId: number): Promise<IMovie> {
         try {
@@ -113,9 +82,11 @@ export class MoviesService {
         }
     }
 
-    async listRecommendedMovies(
-        watchedMoviesIds: number[],
-    ): Promise<IMovieBanner[]> {
-        return await this.moviesRepo.listRecommendedMovies(watchedMoviesIds);
-    }
+  async listRecommendedMovies(
+    watchedMoviesIds: number[],
+  ): Promise<IMovieBanner[]> {
+    const genresIds = await this.genresRepo.listIdsForMovies(watchedMoviesIds)
+    if (!genresIds.length) return []
+    return await this.moviesRepo.listByGenresExcludeByIds(genresIds, watchedMoviesIds);
+  }
 }

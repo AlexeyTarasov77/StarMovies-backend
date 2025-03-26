@@ -1,3 +1,5 @@
+import { SortOrder } from "../core/types";
+
 export interface IReview {
     rating: number;
     comment: string | null;
@@ -66,3 +68,27 @@ export interface IUser {
     updatedAt?: Date;
     reviews?: IReview[];
 }
+
+
+export interface IMoviesRepo {
+  list(limit?: number): Promise<IMovie[]>;
+  getOne(movieID: number): Promise<IMovie>;
+  listByGenresExcludeByIds(
+    genresIds: number[], excludeMoviesIds: number[]
+  ): Promise<IMovieBanner[]>
+  listOrderedByPopulatiry(direction: SortOrder, limit?: number): Promise<IMovieBanner[]>
+}
+
+export interface IGenresRepo {
+  listIdsForMovies(moviesIds: number[]): Promise<number[]>
+  list(): Promise<IGenre[]>;
+}
+
+export interface IActorsRepo {
+  list(): Promise<IActor[]>;
+}
+
+export interface IReviewsRepo {
+  list(): Promise<IReview[]>;
+}
+
