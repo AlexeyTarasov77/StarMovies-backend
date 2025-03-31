@@ -7,6 +7,6 @@ const router = express.Router();
 
 router.get("/healthcheck", coreHandlers.healthcheckHandler);
 router.use("/movies", moviesRouter);
-router.use("/users", usersRouter)
+router.use("/users", usersRouter);
 
 export default router;
