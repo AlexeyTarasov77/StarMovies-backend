@@ -67,18 +67,21 @@ export interface IUser {
   reviews?: IReview[];
 }
 
-
 export interface IMoviesRepo {
   list(limit?: number): Promise<IMovie[]>;
   getOne(movieID: number): Promise<IMovie>;
   listByGenresExcludeByIds(
-    genresIds: number[], excludeMoviesIds: number[]
-  ): Promise<IMovieBanner[]>
-  listOrderedByPopulatiry(direction: SortOrder, limit?: number): Promise<IMovieBanner[]>
+    genresIds: number[],
+    excludeMoviesIds: number[],
+  ): Promise<IMovieBanner[]>;
+  listOrderedByPopulatiry(
+    direction: SortOrder,
+    limit?: number,
+  ): Promise<IMovieBanner[]>;
 }
 
 export interface IGenresRepo {
-  listIdsForMovies(moviesIds: number[]): Promise<number[]>
+  listIdsForMovies(moviesIds: number[]): Promise<number[]>;
   list(): Promise<IGenre[]>;
 }
 
@@ -89,4 +92,3 @@ export interface IActorsRepo {
 export interface IReviewsRepo {
   list(): Promise<IReview[]>;
 }
-

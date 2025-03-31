@@ -1,2 +1,1 @@
-
-export class Middlewares { }
+export class Middlewares {}
