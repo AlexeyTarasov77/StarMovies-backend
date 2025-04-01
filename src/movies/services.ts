@@ -52,12 +52,12 @@ export class MoviesService {
     async createOne(data: Prisma.GenreCreateInput): Promise<IGenre> {
         return await this.genresRepo.createOne(data);
     }
-    // async updateGenre(
-    //     data: Prisma.GenreUpdateInput,
-    //     genreId: number,
-    // ): Promise<IGenre> {
-    //     return await this.genresRepo.updateOne(genreId, data);
-    // }
+    async updateGenre(
+        data: Prisma.GenreUpdateInput,
+        genreId: number,
+    ): Promise<IGenre> {
+        return await this.genresRepo.updateOne(genreId, data);
+    }
 
     async listActors(): Promise<IActor[]> {
         return await this.actorsRepo.list();

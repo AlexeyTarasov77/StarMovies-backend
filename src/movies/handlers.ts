@@ -65,21 +65,26 @@ export class MoviesHandlers {
             throw err;
         }
     };
-    // public updateGenre = async (req: Request, res: Response): Promise<void> => {
-    //     try {
-    //         const genre = await this.service.updateGenre(
-    //             req.body,
-    //             Number(req.params.id),
-    //         );
-    //         res.status(200).json(genre);
-    //     } catch (err) {
-    //         if (err instanceof GenreNotFoundError) {
-    //             res.status(404).json({ message: err.message });
-    //             return;
-    //         }
-    //         throw err;
-    //     }
-    // };
+    public updateGenre = async (req: Request, res: Response): Promise<void> => {
+        try {
+            const genreId = Number(req.params.id);
+            if (isNaN(genreId)) {
+                res.status(400).json({ message: "Invalid genre ID" });
+                return;
+            }
+            const genre = await this.service.updateGenre(
+                req.body,
+                genreId,
+            );
+            res.status(200).json(genre);
+        } catch (err) {
+            if (err instanceof GenreNotFoundError) {
+                res.status(404).json({ message: err.message });
+                return;
+            }
+            throw err;
+        }
+    };
 
     public listActors = async (req: Request, res: Response): Promise<void> => {
         const actors = await this.service.listActors();

@@ -30,24 +30,24 @@ export class GenresRepository {
         }
     }
 
-    // async updateOne(
-    //     id: number,
-    //     data: Prisma.GenreUpdateInput,
-    // ): Promise<IGenre> {
-    //     const currentGenre = await prisma.genre.findUniqueOrThrow({
-    //         where: {
-    //             id: id,
-    //         },
-    //     });
+    async updateOne(
+        id: number,
+        data: Prisma.GenreUpdateInput,
+    ): Promise<IGenre> {
+        const currentGenre = await prisma.genre.findUniqueOrThrow({
+            where: {
+                id: id,
+            },
+        });
 
-    //     const updateGenre = await prisma.genre.update({
-    //         where: {
-    //             id: currentGenre.id,
-    //         },
-    //         data,
-    //     });
-    //     return updateGenre;
-    // }
+        const updatedGenre = await prisma.genre.update({
+            where: {
+                id: currentGenre.id,
+            },
+            data,
+        });
+        return updatedGenre;
+    }
 
     async listIdsForMovies(moviesIds: number[]): Promise<number[]> {
         const genres = await prisma.genre.findMany({

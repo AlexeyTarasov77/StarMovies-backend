@@ -37,4 +37,23 @@ export class UsersRepository {
             throw error;
         }
     }
+
+    async updateOne(
+            id: number,
+            data: Prisma.UserUpdateInput,
+        ): Promise<IUser> {
+            const currentUser = await prisma.user.findUniqueOrThrow({
+                where: {
+                    id: id,
+                },
+            });
+    
+            const updatedUser = await prisma.user.update({
+                where: {
+                    id: currentUser.id,
+                },
+                data,
+            });
+            return updatedUser;
+        }
 }

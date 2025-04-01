@@ -79,7 +79,7 @@ export interface IGenresRepo {
     list(): Promise<IGenre[]>;
     getOne(genreId: number): Promise<IGenre>;
     createOne(data: Prisma.GenreCreateInput): Promise<IGenre>;
-    // updateOne(genreId: number, data: Prisma.GenreUpdateInput): Promise<IGenre>;
+    updateOne(genreId: number, data: Prisma.GenreUpdateInput): Promise<IGenre>;
 }
 
 export interface IActorsRepo {

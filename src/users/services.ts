@@ -47,6 +47,13 @@ export class UsersService {
         return await this.usersRepo.createOne(hashedUserData);
     }
 
+    async updateUser(
+            data: Prisma.UserUpdateInput,
+            userId: number,
+        ): Promise<IUser> {
+            return await this.usersRepo.updateOne(userId, data);
+        }
+
     //   async authRegister(data: IUser) {
     //     const user = await this.userRepo.createOne(data);
     //     if (user) {
