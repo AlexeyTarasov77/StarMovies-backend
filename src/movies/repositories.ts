@@ -1,7 +1,7 @@
 import { IMovie, IMovieBanner, IGenre, IActor, IReview } from "./types";
 import { Movie, Prisma } from "@prisma/client";
 import { prisma, ErrorCodes, getErrorCode } from "../prisma";
-import { NotFoundError } from "../core/repository";
+import { AlreadyExistsError, NotFoundError } from "../core/repository";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { SortOrder } from "../core/types";
 
@@ -118,10 +118,19 @@ export class MoviesRepository {
     });
   }
 
-  async makeFavoriteForUser(movieId: number, userId: number): Promise<Movie> {
-    return await prisma.movie.update({
-      where: { id: movieId },
-      data: { favouriteForUsers: { connect: { id: userId } } }
-    })
+  async makeFavoriteForUser(movieId: number, userId: number): Promise<void> {
+    try {
+      const res = await prisma.$executeRaw`INSERT INTO _MovieToUser(A, B) VALUES (${movieId}, ${userId})`
+      console.log("res", res)
+    } catch (err) {
+      if (getErrorCode(err) == "P2010") {
+        const prismaErr = (err as PrismaClientKnownRequestError)
+        const metaMsg = String(prismaErr.meta!['message']).toLowerCase()
+        if (metaMsg.includes("foreign key")) throw new NotFoundError()
+        if (metaMsg.includes("unique")) throw new AlreadyExistsError()
+        throw err;
+      }
+      throw err
+    }
   }
 }

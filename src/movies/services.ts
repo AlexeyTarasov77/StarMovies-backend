@@ -9,7 +9,7 @@ import {
   IActorsRepo,
   IReviewsRepo,
 } from "./types";
-import { NotFoundError } from "../core/repository";
+import { AlreadyExistsError, NotFoundError } from "../core/repository";
 import { ListMoviesQuery } from "./types";
 import { SortOrder } from "../core/types";
 import { Movie } from "./types";
@@ -17,6 +17,12 @@ import { Movie } from "./types";
 export class MovieNotFoundError extends Error {
   constructor(movieId: number) {
     super(`Movie with id ${movieId} not found`);
+  }
+}
+
+export class MovieAlreadyInFavoritesError extends Error {
+  constructor() {
+    super("That movie has been already added to favorites before");
   }
 }
 
@@ -76,6 +82,13 @@ export class MoviesService {
   }
 
   async addFavoriteMovie(movieId: number, userId: number): Promise<void> {
-    await this.moviesRepo.makeFavoriteForUser(movieId, userId)
+    try {
+
+      await this.moviesRepo.makeFavoriteForUser(movieId, userId)
+    } catch (err) {
+      if (err instanceof NotFoundError) throw new MovieNotFoundError(movieId)
+      if (err instanceof AlreadyExistsError) throw new MovieAlreadyInFavoritesError()
+      throw err
+    }
   }
 }

@@ -83,7 +83,7 @@ export interface IMoviesRepo {
     direction: SortOrder,
     limit?: number,
   ): Promise<IMovieBanner[]>;
-  makeFavoriteForUser(movieId: number, userId: number): Promise<Movie>;
+  makeFavoriteForUser(movieId: number, userId: number): Promise<void>;
 
 }
 

@@ -1,10 +1,10 @@
-import { HTTPBadRequestError, HTTPNotFoundError } from "../core/http-errors";
+import { HTTPBadRequestError, HTTPConflictError, HTTPNotFoundError } from "../core/http-errors";
 import { getSuccededResponse } from "../core/utils";
 import { parseArray } from "../core/utils";
 import { validateObjectId, validateRequest } from "../core/validation";
 import { requireAuthorized } from "../users/utils";
 import { listMoviesQuerySchema } from "./schemas";
-import { MovieNotFoundError, MoviesService } from "./services";
+import { MovieAlreadyInFavoritesError, MovieNotFoundError, MoviesService } from "./services";
 import { Request, Response } from "express";
 
 export class MoviesHandlers {
@@ -63,7 +63,13 @@ export class MoviesHandlers {
   public addFavoriteMovie = async (req: Request, res: Response) => {
     const userId = requireAuthorized(res)
     const movieId = validateObjectId(req.body.movieId)
-    await this.service.addFavoriteMovie(movieId, userId)
+    try {
+      await this.service.addFavoriteMovie(movieId, userId)
+    } catch (err) {
+      if (err instanceof MovieNotFoundError) throw new HTTPNotFoundError(err.message)
+      if (err instanceof MovieAlreadyInFavoritesError) throw new HTTPConflictError(err.message)
+      throw err;
+    }
     res.json(getSuccededResponse(null))
   }
 }
