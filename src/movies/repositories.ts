@@ -1,5 +1,5 @@
 import { IMovie, IMovieBanner, IGenre, IActor, IReview } from "./types";
-import { Prisma } from "@prisma/client";
+import { Movie, Prisma } from "@prisma/client";
 import { prisma, ErrorCodes, getErrorCode } from "../prisma";
 import { NotFoundError } from "../core/repository";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
@@ -116,5 +116,12 @@ export class MoviesRepository {
       },
       select: { id: true, coverUrl: true },
     });
+  }
+
+  async makeFavoriteForUser(movieId: number, userId: number): Promise<Movie> {
+    return await prisma.movie.update({
+      where: { id: movieId },
+      data: { favouriteForUsers: { connect: { id: userId } } }
+    })
   }
 }

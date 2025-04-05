@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import router from "./core/router";
 import { errorHandler } from "./core/http-errors";
+import { container as usersContainer } from "./users/container";
 
 export const apiVersion = "1.0.0";
 const app: express.Express = express();
@@ -15,6 +16,7 @@ app.use(
   }),
 );
 app.use(express.json())
+app.use(usersContainer.middlewares.authenticate)
 
 app.use("/api/v1", router);
 app.use(errorHandler);

@@ -4,6 +4,7 @@ import { validateRequest } from "../core/validation";
 import { InvalidCredentialsError, UserAlreadyExistsError, UsersService } from "./services";
 import { signInSchema, signUpSchema } from "./schemas";
 import { getSuccededResponse } from "../core/utils";
+import { requireAuthorized } from "./utils";
 
 
 export class UsersHandlers {
@@ -35,12 +36,23 @@ export class UsersHandlers {
   };
 
   public getUser = async (req: Request, res: Response) => {
+    const userId = requireAuthorized(res)
     try {
-      const user = await this.service.getUser(res.locals.userId);
+      const user = await this.service.getUser(userId);
       res.status(200).json(getSuccededResponse(user));
     } catch (err) {
       if (err instanceof HTTPUnauthorizedError) throw new HTTPUnauthorizedError(err.message);
       throw err;
     }
   };
+  public listFavoriteMovies = async (req: Request, res: Response) => {
+    const userId = requireAuthorized(res)
+    try {
+      var movies = await this.service.listFavoriteMovies(userId)
+    } catch (err) {
+      if (err instanceof InvalidCredentialsError) throw new HTTPUnauthorizedError(err.message)
+      throw err;
+    }
+    res.json(getSuccededResponse(movies))
+  }
 }

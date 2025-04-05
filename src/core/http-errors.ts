@@ -1,5 +1,6 @@
 import { ZodError } from "zod";
 import { Request, Response, NextFunction } from "express";
+import { FailedResponse } from "./types";
 
 export type SchemaValidationErrors = Record<string, string[]>;
 
@@ -71,11 +72,7 @@ export const errorHandler = (
   res: Response,
   _: NextFunction,
 ) => {
-  const body: {
-    success: false;
-    message: string;
-    errors?: SchemaValidationErrors;
-  } = { success: false, message: err.message };
+  const body: FailedResponse & { errors?: SchemaValidationErrors } = { success: false, message: err.message };
   console.log("Error: ", err);
   if (err instanceof HTTPError) {
     if (err instanceof HTTPValidationError) {

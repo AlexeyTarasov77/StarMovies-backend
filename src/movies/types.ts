@@ -1,4 +1,9 @@
+import { Prisma } from "@prisma/client";
 import { SortOrder } from "../core/types";
+import { listMoviesQuerySchema } from "./schemas";
+import { z } from "zod"
+
+export type Movie = Prisma.MovieUncheckedCreateInput
 
 export interface IReview {
   rating: number;
@@ -78,6 +83,8 @@ export interface IMoviesRepo {
     direction: SortOrder,
     limit?: number,
   ): Promise<IMovieBanner[]>;
+  makeFavoriteForUser(movieId: number, userId: number): Promise<Movie>;
+
 }
 
 export interface IGenresRepo {
@@ -92,3 +99,5 @@ export interface IActorsRepo {
 export interface IReviewsRepo {
   list(): Promise<IReview[]>;
 }
+
+export type ListMoviesQuery = z.infer<typeof listMoviesQuerySchema>;

@@ -10,8 +10,9 @@ import {
   IReviewsRepo,
 } from "./types";
 import { NotFoundError } from "../core/repository";
-import { ListMoviesQuery } from "./schemas";
+import { ListMoviesQuery } from "./types";
 import { SortOrder } from "../core/types";
+import { Movie } from "./types";
 
 export class MovieNotFoundError extends Error {
   constructor(movieId: number) {
@@ -72,5 +73,9 @@ export class MoviesService {
       genresIds,
       watchedMoviesIds,
     );
+  }
+
+  async addFavoriteMovie(movieId: number, userId: number): Promise<void> {
+    await this.moviesRepo.makeFavoriteForUser(movieId, userId)
   }
 }

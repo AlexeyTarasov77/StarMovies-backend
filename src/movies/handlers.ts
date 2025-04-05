@@ -2,7 +2,8 @@ import { HTTPBadRequestError, HTTPNotFoundError } from "../core/http-errors";
 import { getSuccededResponse } from "../core/utils";
 import { parseArray } from "../core/utils";
 import { validateObjectId, validateRequest } from "../core/validation";
-import { ListMoviesQuerySchema } from "./schemas";
+import { requireAuthorized } from "../users/utils";
+import { listMoviesQuerySchema } from "./schemas";
 import { MovieNotFoundError, MoviesService } from "./services";
 import { Request, Response } from "express";
 
@@ -11,7 +12,7 @@ export class MoviesHandlers {
     this.service = service;
   }
   public listMovies = async (req: Request, res: Response) => {
-    const dto = validateRequest(req, ListMoviesQuerySchema, "query");
+    const dto = validateRequest(req, listMoviesQuerySchema, "query");
     const movies = await this.service.listMovies(dto);
     res.status(200).json(getSuccededResponse(movies));
   };
@@ -58,4 +59,11 @@ export class MoviesHandlers {
     const movies = await this.service.listRecommendedMovies(moviesIds);
     res.status(200).json(getSuccededResponse(movies));
   };
+
+  public addFavoriteMovie = async (req: Request, res: Response) => {
+    const userId = requireAuthorized(res)
+    const movieId = validateObjectId(req.body.movieId)
+    await this.service.addFavoriteMovie(movieId, userId)
+    res.json(getSuccededResponse(null))
+  }
 }

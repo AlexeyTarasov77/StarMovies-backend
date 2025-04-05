@@ -34,4 +34,13 @@ export class UsersRepository {
       throw err;
     }
   }
+  async listFavoriteMovies(userId: number) {
+    try {
+      const res = await prisma.user.findUniqueOrThrow({ where: { id: userId }, select: { favouriteMovies: true } })
+      return res.favouriteMovies
+    } catch (err) {
+      if (getErrorCode(err) == ErrorCodes.NotFound) throw new NotFoundError()
+      throw err;
+    }
+  }
 }
