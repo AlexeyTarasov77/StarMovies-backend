@@ -4,7 +4,7 @@ import { parseArray } from "../core/utils";
 import { validateObjectId, validateRequest } from "../core/validation";
 import { ListMoviesQuerySchema } from "./schemas";
 import { MovieNotFoundError, MoviesService } from "./services";
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 
 export class MoviesHandlers {
   constructor(public service: MoviesService) {
@@ -18,7 +18,6 @@ export class MoviesHandlers {
   public getOne = async (
     req: Request,
     res: Response,
-    next: NextFunction,
   ): Promise<void> => {
     const movieId = validateObjectId(req.params.id);
     try {

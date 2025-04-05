@@ -1,6 +1,6 @@
 import { IMovie, IMovieBanner, IGenre, IActor, IReview } from "./types";
 import { Prisma } from "@prisma/client";
-import { prisma, NotFoundErrCode } from "../prisma";
+import { prisma, ErrorCodes, getErrorCode } from "../prisma";
 import { NotFoundError } from "../core/repository";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { SortOrder } from "../core/types";
@@ -96,10 +96,8 @@ export class MoviesRepository {
         },
       });
     } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === NotFoundErrCode) {
-          throw new NotFoundError("Not found");
-        }
+      if (getErrorCode(error) == ErrorCodes.NotFound) {
+        throw new NotFoundError();
       }
       throw error;
     }

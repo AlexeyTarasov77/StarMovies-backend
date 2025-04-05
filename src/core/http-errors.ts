@@ -17,6 +17,18 @@ export class HTTPNotFoundError extends HTTPError {
   }
 }
 
+export class HTTPConflictError extends HTTPError {
+  constructor(message?: string) {
+    super(409, message || "Conflict");
+  }
+}
+
+export class HTTPUnauthorizedError extends HTTPError {
+  constructor(message?: string) {
+    super(401, message || "Unauthorized");
+  }
+}
+
 export class HTTPBadRequestError extends HTTPError {
   constructor(message?: string) {
     super(400, message || "Bad request");

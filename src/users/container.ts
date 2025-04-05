@@ -1,13 +1,15 @@
 import { UsersHandlers } from "./handlers";
-import { Middlewares } from "./middlewares";
+import { UsersService } from "./services";
+import { UsersRepository } from "./repositories";
 
-class Container {
+export class Container {
   handlers: UsersHandlers;
-  middlewares: Middlewares;
 
   constructor() {
-    this.handlers = new UsersHandlers();
-    this.middlewares = new Middlewares();
+    const userRepository = new UsersRepository();
+    const userService = new UsersService(userRepository);
+    this.handlers = new UsersHandlers(userService);
   }
 }
+
 export const container = new Container();
