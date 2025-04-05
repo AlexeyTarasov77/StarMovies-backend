@@ -1,7 +1,8 @@
-import { HTTPBadRequestError, HTTPConflictError, HTTPNotFoundError } from "../core/http-errors";
+import { HTTPBadRequestError, HTTPConflictError, HTTPNotFoundError, HTTPUnauthorizedError } from "../core/http-errors";
 import { getSuccededResponse } from "../core/utils";
 import { parseArray } from "../core/utils";
 import { validateObjectId, validateRequest } from "../core/validation";
+import { InvalidCredentialsError } from "../users/services";
 import { requireAuthorized } from "../users/utils";
 import { listMoviesQuerySchema } from "./schemas";
 import { MovieAlreadyInFavoritesError, MovieNotFoundError, MoviesService } from "./services";
@@ -72,4 +73,15 @@ export class MoviesHandlers {
     }
     res.json(getSuccededResponse(null))
   }
+  public listFavoriteMovies = async (req: Request, res: Response) => {
+    const userId = requireAuthorized(res)
+    try {
+      var movies = await this.service.listFavoriteMovies(userId)
+    } catch (err) {
+      if (err instanceof InvalidCredentialsError) throw new HTTPUnauthorizedError(err.message)
+      throw err;
+    }
+    res.json(getSuccededResponse(movies))
+  }
+
 }

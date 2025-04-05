@@ -72,6 +72,10 @@ export interface IUser {
   reviews?: IReview[];
 }
 
+export interface IUsersRepo {
+  listFavoriteMovies(userId: number): Promise<Movie[]>
+}
+
 export interface IMoviesRepo {
   list(limit?: number): Promise<IMovie[]>;
   getOne(movieID: number): Promise<IMovie>;

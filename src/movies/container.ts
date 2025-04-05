@@ -1,3 +1,4 @@
+import { UsersRepository } from "../users/repositories";
 import { MoviesHandlers } from "./handlers";
 import {
   ActorsRepository,
@@ -14,8 +15,10 @@ export class Container {
     const genresRepo = new GenresRepository();
     const actorsRepo = new ActorsRepository();
     const reviewsRepo = new ReviewsRepository();
+    const usersRepo = new UsersRepository()
     const moviesService = new MoviesService(
       moviesRepo,
+      usersRepo,
       genresRepo,
       actorsRepo,
       reviewsRepo,

@@ -91,13 +91,4 @@ export class UsersService {
     }
     return { ...user, password: undefined }
   }
-  async listFavoriteMovies(userId: number) {
-    try {
-      return await this.usersRepository.listFavoriteMovies(userId)
-    } catch (err) {
-      if (err instanceof NotFoundError) throw new InvalidCredentialsError()
-      throw err;
-    }
-  }
-
 }

@@ -8,11 +8,13 @@ import {
   IGenresRepo,
   IActorsRepo,
   IReviewsRepo,
+  IUsersRepo,
 } from "./types";
 import { AlreadyExistsError, NotFoundError } from "../core/repository";
 import { ListMoviesQuery } from "./types";
 import { SortOrder } from "../core/types";
 import { Movie } from "./types";
+import { InvalidCredentialsError } from "../users/services";
 
 export class MovieNotFoundError extends Error {
   constructor(movieId: number) {
@@ -29,6 +31,7 @@ export class MovieAlreadyInFavoritesError extends Error {
 export class MoviesService {
   constructor(
     public moviesRepo: IMoviesRepo,
+    public usersRepo: IUsersRepo,
     public genresRepo: IGenresRepo,
     public actorsRepo: IActorsRepo,
     public reviewsRepo: IReviewsRepo,
@@ -37,6 +40,7 @@ export class MoviesService {
     this.genresRepo = genresRepo;
     this.actorsRepo = actorsRepo;
     this.reviewsRepo = reviewsRepo;
+    this.usersRepo = usersRepo;
   }
 
   async listGenres(): Promise<IGenre[]> {
@@ -89,6 +93,14 @@ export class MoviesService {
       if (err instanceof NotFoundError) throw new MovieNotFoundError(movieId)
       if (err instanceof AlreadyExistsError) throw new MovieAlreadyInFavoritesError()
       throw err
+    }
+  }
+  async listFavoriteMovies(userId: number) {
+    try {
+      return await this.usersRepo.listFavoriteMovies(userId)
+    } catch (err) {
+      if (err instanceof NotFoundError) throw new InvalidCredentialsError()
+      throw err;
     }
   }
 }

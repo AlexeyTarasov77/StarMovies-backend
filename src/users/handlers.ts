@@ -45,14 +45,4 @@ export class UsersHandlers {
       throw err;
     }
   };
-  public listFavoriteMovies = async (req: Request, res: Response) => {
-    const userId = requireAuthorized(res)
-    try {
-      var movies = await this.service.listFavoriteMovies(userId)
-    } catch (err) {
-      if (err instanceof InvalidCredentialsError) throw new HTTPUnauthorizedError(err.message)
-      throw err;
-    }
-    res.json(getSuccededResponse(movies))
-  }
 }
