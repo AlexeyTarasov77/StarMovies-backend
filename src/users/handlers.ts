@@ -1,11 +1,24 @@
 import { Request, Response } from "express";
-import { HTTPConflictError, HTTPNotFoundError, HTTPUnauthorizedError } from "../core/http-errors";
+import {
+    HTTPConflictError,
+    HTTPNotFoundError,
+    HTTPUnauthorizedError,
+} from "../core/http-errors";
 import { validateObjectId, validateRequest } from "../core/validation";
-import { InvalidCredentialsError, UserAlreadyExistsError, UserNotFoundError, UsersService } from "./services";
-import { createUserSchema, signInSchema, signUpSchema, updateUserSchema } from "./schemas";
+import {
+    InvalidCredentialsError,
+    UserAlreadyExistsError,
+    UserNotFoundError,
+    UsersService,
+} from "./services";
+import {
+    createUserSchema,
+    signInSchema,
+    signUpSchema,
+    updateUserSchema,
+} from "./schemas";
 import { getSuccededResponse } from "../core/utils";
 import { requireAdmin, requireAuthorized } from "./utils";
-
 
 export class UsersHandlers {
     constructor(public service: UsersService) {
@@ -19,7 +32,8 @@ export class UsersHandlers {
 
             res.status(201).json(getSuccededResponse(data));
         } catch (err) {
-            if (err instanceof UserAlreadyExistsError) throw new HTTPConflictError(err.message);
+            if (err instanceof UserAlreadyExistsError)
+                throw new HTTPConflictError(err.message);
             throw err;
         }
     };
@@ -30,7 +44,8 @@ export class UsersHandlers {
             const token = await this.service.signIn(body);
             res.json(getSuccededResponse(token));
         } catch (err) {
-            if (err instanceof InvalidCredentialsError) throw new HTTPUnauthorizedError(err.message);
+            if (err instanceof InvalidCredentialsError)
+                throw new HTTPUnauthorizedError(err.message);
             throw err;
         }
     };
@@ -41,7 +56,8 @@ export class UsersHandlers {
             const user = await this.service.getUser(userId);
             res.status(200).json(getSuccededResponse(user));
         } catch (err) {
-            if (err instanceof InvalidCredentialsError) throw new HTTPUnauthorizedError(err.message);
+            if (err instanceof InvalidCredentialsError)
+                throw new HTTPUnauthorizedError(err.message);
             throw err;
         }
     };
@@ -81,16 +97,14 @@ export class UsersHandlers {
         const userId = validateObjectId(req.params.id);
         const body = validateRequest(req, updateUserSchema);
         try {
-            const user = await this.service.updateUser(
-                body,
-                userId,
-            );
+            const user = await this.service.updateUser(body, userId);
             res.status(200).json(getSuccededResponse(user));
         } catch (err) {
             if (err instanceof UserNotFoundError) {
                 throw new HTTPNotFoundError(err.message);
             }
-            if (err instanceof UserAlreadyExistsError) throw new HTTPConflictError(err.message);
+            if (err instanceof UserAlreadyExistsError)
+                throw new HTTPConflictError(err.message);
             throw err;
         }
     };
@@ -101,7 +115,8 @@ export class UsersHandlers {
             const user = await this.service.deleteUser(userId);
             res.status(200).json(getSuccededResponse(user));
         } catch (err) {
-            if (err instanceof UserNotFoundError) throw new HTTPNotFoundError(err.message);
+            if (err instanceof UserNotFoundError)
+                throw new HTTPNotFoundError(err.message);
             throw err;
         }
     };

@@ -9,4 +9,3 @@ export const listMoviesQuerySchema = z.object({
         z.array(z.enum(["mostPopular"])),
     ),
 });
-

@@ -42,11 +42,10 @@ export class HTTPForbiddenError extends HTTPError {
     }
 }
 
-
 export class HTTPValidationError extends HTTPError {
     constructor(
-    public errors: SchemaValidationErrors,
-    message?: string,
+        public errors: SchemaValidationErrors,
+        message?: string,
     ) {
         super(422, message || "Validation error");
         this.errors = errors;
@@ -65,7 +64,7 @@ export class HTTPValidationError extends HTTPError {
                 formattedErrors["others"] = value;
             } else {
                 formattedErrors[key] = (
-          value as unknown as { _errors: string[] }
+                    value as unknown as { _errors: string[] }
                 )._errors;
             }
         });
@@ -79,7 +78,10 @@ export const errorHandler = (
     res: Response,
     _: NextFunction,
 ) => {
-    const body: FailedResponse & { errors?: SchemaValidationErrors } = { success: false, message: err.message };
+    const body: FailedResponse & { errors?: SchemaValidationErrors } = {
+        success: false,
+        message: err.message,
+    };
     console.log("Error: ", err);
     if (err instanceof HTTPError) {
         if (err instanceof HTTPValidationError) {

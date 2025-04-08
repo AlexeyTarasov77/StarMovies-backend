@@ -4,7 +4,11 @@ import { HTTPUnauthorizedError } from "../core/http-errors";
 import { AuthTokenPayload } from "./types";
 
 export class UsersMiddlewares {
-    public authenticate = async (req: Request, res: Response, next: NextFunction) => {
+    public authenticate = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ) => {
         const authHeader = req.headers.authorization;
         if (!authHeader) {
             return next();
@@ -16,7 +20,10 @@ export class UsersMiddlewares {
         }
         let payload;
         try {
-            payload = jwt.verify(token, process.env.JWT_SECRET!) as AuthTokenPayload;
+            payload = jwt.verify(
+                token,
+                process.env.JWT_SECRET!,
+            ) as AuthTokenPayload;
         } catch {
             throw authErr;
         }

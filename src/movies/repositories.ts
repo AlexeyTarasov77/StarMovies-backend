@@ -24,7 +24,8 @@ export class GenresRepository {
             });
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
-                if (error.code === ErrorCodes.NotFound) throw new NotFoundError();
+                if (error.code === ErrorCodes.NotFound)
+                    throw new NotFoundError();
             }
             throw error;
         }
@@ -182,7 +183,13 @@ export class MoviesRepository {
                     actors: true,
                     reviews: {
                         include: {
-                            user: { select: { avatarUrl: true, username: true, id: true } },
+                            user: {
+                                select: {
+                                    avatarUrl: true,
+                                    username: true,
+                                    id: true,
+                                },
+                            },
                         },
                     },
                 },
@@ -212,12 +219,15 @@ export class MoviesRepository {
 
     async makeFavoriteForUser(movieId: number, userId: number): Promise<void> {
         try {
-            const res = await prisma.$executeRaw`INSERT INTO _MovieToUser(A, B) VALUES(${movieId}, ${userId})`;
+            const res =
+                await prisma.$executeRaw`INSERT INTO _MovieToUser(A, B) VALUES(${movieId}, ${userId})`;
             console.log("res", res);
         } catch (err) {
             if (getErrorCode(err) == "P2010") {
-                const prismaErr = (err as PrismaClientKnownRequestError);
-                const metaMsg = String(prismaErr.meta!["message"]).toLowerCase();
+                const prismaErr = err as PrismaClientKnownRequestError;
+                const metaMsg = String(
+                    prismaErr.meta!["message"],
+                ).toLowerCase();
                 if (metaMsg.includes("foreign key")) throw new NotFoundError();
                 if (metaMsg.includes("unique")) throw new AlreadyExistsError();
                 throw err;

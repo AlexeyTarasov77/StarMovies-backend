@@ -1,4 +1,4 @@
-export class RepositoryError extends Error { }
+export class RepositoryError extends Error {}
 export class NotFoundError extends RepositoryError {
     constructor() {
         super("Entity not found");

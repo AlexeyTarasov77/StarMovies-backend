@@ -1,6 +1,5 @@
 import { FailedResponse, SortOrder, SuccededResponse } from "./types";
 
-
 export const parseArray = <T>(
     arrLike: any, // eslint-disable-line @typescript-eslint/no-explicit-any
     castCallback?: (el: any) => T, // eslint-disable-line @typescript-eslint/no-explicit-any

@@ -3,7 +3,9 @@ import { Role } from "@prisma/client";
 
 export const signInSchema = z.object({
     email: z.string().email(),
-    password: z.string().min(8, "The password must contain at least 6 characters"),
+    password: z
+        .string()
+        .min(8, "The password must contain at least 6 characters"),
 });
 
 export const signUpSchema = signInSchema.extend({

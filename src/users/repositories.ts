@@ -36,17 +36,18 @@ export class UsersRepository {
     }
     async listFavoriteMovies(userId: number) {
         try {
-            const res = await prisma.user.findUniqueOrThrow({ where: { id: userId }, select: { favouriteMovies: true } });
+            const res = await prisma.user.findUniqueOrThrow({
+                where: { id: userId },
+                select: { favouriteMovies: true },
+            });
             return res.favouriteMovies;
         } catch (err) {
-            if (getErrorCode(err) == ErrorCodes.NotFound) throw new NotFoundError();
+            if (getErrorCode(err) == ErrorCodes.NotFound)
+                throw new NotFoundError();
             throw err;
         }
     }
-    async updateById(
-        id: number,
-        data: Prisma.UserUpdateInput,
-    ): Promise<User> {
+    async updateById(id: number, data: Prisma.UserUpdateInput): Promise<User> {
         const updatedUser = await prisma.user.update({
             where: { id },
             data,
@@ -60,7 +61,8 @@ export class UsersRepository {
         try {
             await prisma.user.delete({ where: { id: userId } });
         } catch (err) {
-            if (getErrorCode(err) == ErrorCodes.NotFound) throw new NotFoundError();
+            if (getErrorCode(err) == ErrorCodes.NotFound)
+                throw new NotFoundError();
             throw err;
         }
     }

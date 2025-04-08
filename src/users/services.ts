@@ -1,4 +1,12 @@
-import { AuthTokenPayload, createUserInput, ShowUser, signInInput, signUpInput, updateUserInput, User } from "./types";
+import {
+    AuthTokenPayload,
+    createUserInput,
+    ShowUser,
+    signInInput,
+    signUpInput,
+    updateUserInput,
+    User,
+} from "./types";
 import { AlreadyExistsError, NotFoundError } from "../core/repository";
 import { UsersRepository } from "./repositories";
 import { compare, hash } from "bcryptjs";
@@ -31,7 +39,9 @@ export class UsersService {
         this.hashSalt = 10;
     }
 
-    private async withHashedPassword<T>(data: T & { password: string }): Promise<T & { password: string }> {
+    private async withHashedPassword<T>(
+        data: T & { password: string },
+    ): Promise<T & { password: string }> {
         const hashedPassword = await hash(data.password, this.hashSalt);
 
         return {
@@ -52,11 +62,9 @@ export class UsersService {
             throw new InvalidCredentialsError();
         }
         const payload: AuthTokenPayload = { uid: user.id };
-        const token = sign(
-            payload,
-            process.env.JWT_SECRET!,
-            { expiresIn: process.env.JWT_TTL as StringValue },
-        );
+        const token = sign(payload, process.env.JWT_SECRET!, {
+            expiresIn: process.env.JWT_TTL as StringValue,
+        });
 
         return token;
     }
@@ -73,13 +81,13 @@ export class UsersService {
         }
     }
 
-    async signUp(data: signUpInput): Promise<{ user: ShowUser, token: string }> {
+    async signUp(
+        data: signUpInput,
+    ): Promise<{ user: ShowUser; token: string }> {
         const user = await this.createUser(data);
-        const token = sign(
-            { userId: user.id },
-            process.env.JWT_SECRET!,
-            { expiresIn: process.env.JWT_TTL as StringValue },
-        );
+        const token = sign({ userId: user.id }, process.env.JWT_SECRET!, {
+            expiresIn: process.env.JWT_TTL as StringValue,
+        });
 
         return { user, token: token };
     }
@@ -96,21 +104,19 @@ export class UsersService {
         }
     }
 
-    async updateUser(
-        data: updateUserInput,
-        userId: number,
-    ): Promise<User> {
+    async updateUser(data: updateUserInput, userId: number): Promise<User> {
         return await this.usersRepo.updateById(userId, data);
     }
     async listUsers(): Promise<ShowUser[]> {
         const users = await this.usersRepo.list();
-        return users.map(user => ({ ...user, password: undefined }));
+        return users.map((user) => ({ ...user, password: undefined }));
     }
     async deleteUser(userId: number): Promise<void> {
         try {
             await this.usersRepo.deleteById(userId);
         } catch (err) {
-            if (err instanceof NotFoundError) throw new UserNotFoundError("id=" + userId);
+            if (err instanceof NotFoundError)
+                throw new UserNotFoundError("id=" + userId);
             throw err;
         }
     }

@@ -123,7 +123,8 @@ export class MoviesService {
     async listRecommendedMovies(
         watchedMoviesIds: number[],
     ): Promise<IMovieBanner[]> {
-        const genresIds = await this.genresRepo.listIdsForMovies(watchedMoviesIds);
+        const genresIds =
+            await this.genresRepo.listIdsForMovies(watchedMoviesIds);
         if (!genresIds.length) return [];
         return await this.moviesRepo.listByGenresExcludeByIds(
             genresIds,
@@ -133,11 +134,12 @@ export class MoviesService {
 
     async addFavoriteMovie(movieId: number, userId: number): Promise<void> {
         try {
-
             await this.moviesRepo.makeFavoriteForUser(movieId, userId);
         } catch (err) {
-            if (err instanceof NotFoundError) throw new MovieNotFoundError(movieId);
-            if (err instanceof AlreadyExistsError) throw new MovieAlreadyInFavoritesError();
+            if (err instanceof NotFoundError)
+                throw new MovieNotFoundError(movieId);
+            if (err instanceof AlreadyExistsError)
+                throw new MovieAlreadyInFavoritesError();
             throw err;
         }
     }
@@ -145,7 +147,8 @@ export class MoviesService {
         try {
             return await this.usersRepo.listFavoriteMovies(userId);
         } catch (err) {
-            if (err instanceof NotFoundError) throw new InvalidCredentialsError();
+            if (err instanceof NotFoundError)
+                throw new InvalidCredentialsError();
             throw err;
         }
     }

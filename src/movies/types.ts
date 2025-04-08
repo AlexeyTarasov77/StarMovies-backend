@@ -3,7 +3,7 @@ import { SortOrder } from "../core/types";
 import { listMoviesQuerySchema } from "./schemas";
 import { z } from "zod";
 
-export type Movie = Prisma.MovieUncheckedCreateInput
+export type Movie = Prisma.MovieUncheckedCreateInput;
 
 export interface IReview {
     rating: number;
@@ -64,11 +64,11 @@ export interface ICountry {
 }
 
 export interface IUsersRepo {
-    listFavoriteMovies(userId: number): Promise<Movie[]>
+    listFavoriteMovies(userId: number): Promise<Movie[]>;
 }
 
 export interface ICountriesRepo {
-    list(): Promise<Country[]>
+    list(): Promise<Country[]>;
 }
 
 export interface IMoviesRepo {
@@ -83,7 +83,6 @@ export interface IMoviesRepo {
         limit?: number,
     ): Promise<IMovieBanner[]>;
     makeFavoriteForUser(movieId: number, userId: number): Promise<void>;
-
 }
 
 export interface IGenresRepo {

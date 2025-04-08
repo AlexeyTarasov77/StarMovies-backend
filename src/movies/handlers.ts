@@ -1,11 +1,22 @@
-import { HTTPBadRequestError, HTTPConflictError, HTTPNotFoundError, HTTPUnauthorizedError } from "../core/http-errors";
+import {
+    HTTPBadRequestError,
+    HTTPConflictError,
+    HTTPNotFoundError,
+    HTTPUnauthorizedError,
+} from "../core/http-errors";
 import { getSuccededResponse } from "../core/utils";
 import { parseArray } from "../core/utils";
 import { validateObjectId, validateRequest } from "../core/validation";
 import { InvalidCredentialsError } from "../users/services";
 import { requireAuthorized } from "../users/utils";
 import { listMoviesQuerySchema } from "./schemas";
-import { ActorNotFoundError, GenreNotFoundError, MovieAlreadyInFavoritesError, MovieNotFoundError, MoviesService } from "./services";
+import {
+    ActorNotFoundError,
+    GenreNotFoundError,
+    MovieAlreadyInFavoritesError,
+    MovieNotFoundError,
+    MoviesService,
+} from "./services";
 import { Request, Response } from "express";
 
 export class MoviesHandlers {
@@ -17,10 +28,7 @@ export class MoviesHandlers {
         const movies = await this.service.listMovies(dto);
         res.status(200).json(getSuccededResponse(movies));
     };
-    public getMovie = async (
-        req: Request,
-        res: Response,
-    ): Promise<void> => {
+    public getMovie = async (req: Request, res: Response): Promise<void> => {
         const movieId = validateObjectId(req.params.id);
         try {
             const movie = await this.service.getMovie(movieId);
@@ -60,10 +68,7 @@ export class MoviesHandlers {
                 res.status(400).json({ message: "Invalid genre ID" });
                 return;
             }
-            const genre = await this.service.updateGenre(
-                req.body,
-                genreId,
-            );
+            const genre = await this.service.updateGenre(req.body, genreId);
             res.status(200).json(genre);
         } catch (err) {
             if (err instanceof GenreNotFoundError) {
@@ -87,7 +92,6 @@ export class MoviesHandlers {
         }
     };
     public getActor = async (req: Request, res: Response): Promise<void> => {
-
         const actorId = validateObjectId(req.params.id);
         try {
             const actor = await this.service.getActor(actorId);
@@ -126,8 +130,10 @@ export class MoviesHandlers {
         try {
             await this.service.addFavoriteMovie(movieId, userId);
         } catch (err) {
-            if (err instanceof MovieNotFoundError) throw new HTTPNotFoundError(err.message);
-            if (err instanceof MovieAlreadyInFavoritesError) throw new HTTPConflictError(err.message);
+            if (err instanceof MovieNotFoundError)
+                throw new HTTPNotFoundError(err.message);
+            if (err instanceof MovieAlreadyInFavoritesError)
+                throw new HTTPConflictError(err.message);
             throw err;
         }
         res.json(getSuccededResponse(null));
@@ -138,7 +144,8 @@ export class MoviesHandlers {
             const movies = await this.service.listFavoriteMovies(userId);
             res.json(getSuccededResponse(movies));
         } catch (err) {
-            if (err instanceof InvalidCredentialsError) throw new HTTPUnauthorizedError(err.message);
+            if (err instanceof InvalidCredentialsError)
+                throw new HTTPUnauthorizedError(err.message);
             throw err;
         }
     };
@@ -147,5 +154,4 @@ export class MoviesHandlers {
         const countries = await this.service.listCountries();
         res.json(getSuccededResponse(countries));
     };
-
 }
