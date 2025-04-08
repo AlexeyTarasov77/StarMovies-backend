@@ -1,6 +1,5 @@
-import { AuthTokenPayload, ShowUser, signInInput, signUpInput, UserCreate } from "./types";
+import { AuthTokenPayload, createUserInput, ShowUser, signInInput, signUpInput, updateUserInput, User, UserCreate } from "./types";
 import { AlreadyExistsError, NotFoundError } from "../core/repository";
-import { Prisma } from "@prisma/client";
 import { UsersRepository } from "./repositories";
 import { compare, hash } from "bcryptjs"
 import { sign } from 'jsonwebtoken'
@@ -23,20 +22,26 @@ export class UserNotFoundError extends Error {
   }
 }
 
-
 export class UsersService {
-  private usersRepository: UsersRepository;
-  private authTokenTTL: StringValue
+  private usersRepo: UsersRepository;
   private hashSalt: number;
 
   constructor(userRepository: UsersRepository) {
-    this.usersRepository = userRepository;
-    this.authTokenTTL = "6h";
+    this.usersRepo = userRepository;
     this.hashSalt = 10;
   }
 
+  private async withHashedPassword<T>(data: T & { password: string }): Promise<T & { password: string }> {
+    const hashedPassword = await hash(data.password, this.hashSalt);
+
+    return {
+      ...data,
+      password: hashedPassword
+    }
+  }
+
   async signIn(data: signInInput): Promise<string> {
-    const user = await this.usersRepository.findByEmail(data.email);
+    const user = await this.usersRepo.findByEmail(data.email);
     if (!user) {
       throw new InvalidCredentialsError();
     }
@@ -55,34 +60,33 @@ export class UsersService {
 
     return token
   }
-
-  async signUp(data: signUpInput): Promise<{ user: ShowUser, token: string }> {
-    const hashedPassword = await hash(data.password, this.hashSalt);
-
-    const userData = {
-      ...data,
-      password: hashedPassword
-    }
+  async createUser(data: createUserInput): Promise<ShowUser> {
+    const userData = await this.withHashedPassword(data)
     try {
-      var newUser = await this.usersRepository.createUser(userData);
+      var newUser = await this.usersRepo.create(userData);
     } catch (err) {
       if (err instanceof AlreadyExistsError) {
         throw new UserAlreadyExistsError();
       }
       throw err;
     }
+    return { ...newUser, password: undefined }
+  }
+
+  async signUp(data: signUpInput): Promise<{ user: ShowUser, token: string }> {
+    const user = await this.createUser(data)
     const token = sign(
-      { userId: newUser.id },
+      { userId: user.id },
       process.env.JWT_SECRET!,
       { expiresIn: process.env.JWT_TTL as StringValue }
     );
 
-    return { user: { ...newUser, password: undefined }, token: token }
+    return { user, token: token }
   }
 
   async getUser(userId: number): Promise<ShowUser> {
     try {
-      var user = await this.usersRepository.findById(userId)
+      var user = await this.usersRepo.findById(userId)
     } catch (err) {
       if (err instanceof NotFoundError) {
         throw new InvalidCredentialsError()
@@ -90,5 +94,16 @@ export class UsersService {
       throw err;
     }
     return { ...user, password: undefined }
+  }
+
+  async updateUser(
+    data: updateUserInput,
+    userId: number,
+  ): Promise<User> {
+    return await this.usersRepo.updateById(userId, data);
+  }
+  async listUsers(): Promise<ShowUser[]> {
+    const users = await this.usersRepo.list();
+    return users.map(user => ({ ...user, password: undefined }))
   }
 }

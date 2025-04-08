@@ -1,27 +1,30 @@
 model Movie {
-  id            Int       @id @default(autoincrement()) 
-  name          String    
-  synopsis      String?
-  releaseDate   DateTime  
-  runtime       Int       
-  minAge        Int?      @default(0) 
-  coverUrl      String?
+  id          Int      @id @default(autoincrement())
+  name        String
+  synopsis    String?
+  releaseDate DateTime
+  runtime     Int
+  minAge      Int?     @default(0)
+  coverUrl    String?
 
-  createdAt     DateTime  @default(now()) 
-  updatedAt     DateTime  @updatedAt 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  actors        Actor[]   
-  genres        Genre[]  
-  
-  countryOfOriginId Int   
-  countryOfOrigin Country @relation(fields: [countryOfOriginId], references: [id])
-  
-  reviews       Review[]  
+  //   rating        Int
+
+  actors Actor[]
+  genres Genre[]
+
+  countryOfOriginId Int
+  countryOfOrigin   Country @relation(fields: [countryOfOriginId], references: [id])
+
+  reviews           Review[]
   favouriteForUsers User[]
 }
 
 model Genre {
-  id     Int     @id @default(autoincrement())
-  name   String
-  movies Movie[] 
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String?
+  movies      Movie[]
 }

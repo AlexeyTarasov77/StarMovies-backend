@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { z } from "zod"
-import { signInSchema, signUpSchema } from "./schemas";
+import { createUserSchema, signInSchema, signUpSchema, updateUserSchema } from "./schemas";
 
 export interface IUsersRepo {
     list(): Promise<UserCreate[]>;
@@ -18,3 +18,5 @@ export type ShowUser = Omit<User, "password"> & { password: undefined }
 
 export type signInInput = z.infer<typeof signInSchema>
 export type signUpInput = z.infer<typeof signUpSchema>
+export type createUserInput = z.infer<typeof createUserSchema>
+export type updateUserInput = z.infer<typeof updateUserSchema>

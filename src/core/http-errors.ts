@@ -36,6 +36,13 @@ export class HTTPBadRequestError extends HTTPError {
   }
 }
 
+export class HTTPForbiddenError extends HTTPError {
+  constructor(message?: string) {
+    super(403, message || "Forbidden");
+  }
+}
+
+
 export class HTTPValidationError extends HTTPError {
   constructor(
     public errors: SchemaValidationErrors,

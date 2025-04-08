@@ -5,7 +5,7 @@ import { validateObjectId, validateRequest } from "../core/validation";
 import { InvalidCredentialsError } from "../users/services";
 import { requireAuthorized } from "../users/utils";
 import { listMoviesQuerySchema } from "./schemas";
-import { MovieAlreadyInFavoritesError, MovieNotFoundError, MoviesService } from "./services";
+import { ActorNotFoundError, GenreNotFoundError, MovieAlreadyInFavoritesError, MovieNotFoundError, MoviesService } from "./services";
 import { Request, Response } from "express";
 
 export class MoviesHandlers {
@@ -17,7 +17,7 @@ export class MoviesHandlers {
     const movies = await this.service.listMovies(dto);
     res.status(200).json(getSuccededResponse(movies));
   };
-  public getOne = async (
+  public getMovie = async (
     req: Request,
     res: Response,
   ): Promise<void> => {
@@ -40,6 +40,65 @@ export class MoviesHandlers {
   public listActors = async (req: Request, res: Response): Promise<void> => {
     const actors = await this.service.listActors();
     res.status(200).json(getSuccededResponse(actors));
+  };
+  public createGenre = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const genre = await this.service.createOne(req.body);
+      res.status(200).json(genre);
+    } catch (err) {
+      if (err instanceof GenreNotFoundError) {
+        res.status(404).json({ message: err.message });
+        return;
+      }
+      throw err;
+    }
+  };
+  public updateGenre = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const genreId = Number(req.params.id);
+      if (isNaN(genreId)) {
+        res.status(400).json({ message: "Invalid genre ID" });
+        return;
+      }
+      const genre = await this.service.updateGenre(
+        req.body,
+        genreId,
+      );
+      res.status(200).json(genre);
+    } catch (err) {
+      if (err instanceof GenreNotFoundError) {
+        res.status(404).json({ message: err.message });
+        return;
+      }
+      throw err;
+    }
+  };
+  public getGenre = async (req: Request, res: Response): Promise<void> => {
+    const genreId = validateObjectId(req.params.id);
+    try {
+      const genre = await this.service.getGenre(genreId);
+      res.status(200).json(genre);
+    } catch (err) {
+      if (err instanceof GenreNotFoundError) {
+        res.status(404).json({ message: err.message });
+        return;
+      }
+      throw err;
+    }
+  };
+  public getActor = async (req: Request, res: Response): Promise<void> => {
+
+    const actorId = validateObjectId(req.params.id);
+    try {
+      const actor = await this.service.getActor(actorId);
+      res.status(200).json(actor);
+    } catch (err) {
+      if (err instanceof ActorNotFoundError) {
+        res.status(404).json({ message: err.message });
+        return;
+      }
+      throw err;
+    }
   };
 
   public listReviews = async (req: Request, res: Response): Promise<void> => {
