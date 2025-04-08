@@ -16,8 +16,7 @@ app.use(
 );
 
 app.use("/api/v1", router);
-app.use(errorHandler)
-app.use(express.json())
+app.use(errorHandler);
 
 app.listen(PORT, HOST, () => {
   console.log(`Server is running on http://${HOST}:${PORT}`);

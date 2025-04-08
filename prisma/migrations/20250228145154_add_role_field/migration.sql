@@ -1,9 +1,3 @@
-/*
-  Warnings:
-
-  - Added the required column `age` to the `User` table without a default value. This is not possible if the table is not empty.
-
-*/
 -- CreateTable
 CREATE TABLE "_MovieToUser" (
     "A" INTEGER NOT NULL,
@@ -21,9 +15,9 @@ CREATE TABLE "new_User" (
     "email" TEXT NOT NULL,
     "avatarUrl" TEXT,
     "password" TEXT NOT NULL,
-    "age" INTEGER NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL
+    "updatedAt" DATETIME NOT NULL,
+    "role" TEXT NOT NULL DEFAULT 'USER'
 );
 INSERT INTO "new_User" ("avatarUrl", "createdAt", "email", "id", "password", "updatedAt", "username") SELECT "avatarUrl", "createdAt", "email", "id", "password", "updatedAt", "username" FROM "User";
 DROP TABLE "User";

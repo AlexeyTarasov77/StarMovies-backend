@@ -1,11 +1,25 @@
-import { IMovie, IMovieBanner, IGenre, IActor, IReview } from "./interfaces";
+import { IMovie, IMovieBanner, IGenre, IActor, IReview } from "./types";
+import { Prisma } from "@prisma/client";
 import { prisma, NotFoundErrCode } from "../prisma";
 import { NotFoundError } from "../core/repository";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { SortOrder } from "../core/types";
 
 export class GenresRepository {
   async list(): Promise<IGenre[]> {
     return await prisma.genre.findMany({});
+  }
+
+  async listIdsForMovies(moviesIds: number[]): Promise<number[]> {
+    const genres = await prisma.genre.findMany({
+      where: {
+        movies: {
+          some: { id: { in: moviesIds } },
+        },
+      },
+      select: { id: true },
+    });
+    return genres.map((genre) => genre.id);
   }
 }
 export class ActorsRepository {
@@ -20,8 +34,9 @@ export class ReviewsRepository {
 }
 
 export class MoviesRepository {
-  async list(): Promise<IMovie[]> {
+  async list(limit?: number): Promise<IMovie[]> {
     const movies = await prisma.movie.findMany({
+      take: limit,
       include: {
         genres: { select: { id: true, name: true } },
         actors: { select: { id: true, firstName: true, lastName: true } },
@@ -39,6 +54,30 @@ export class MoviesRepository {
       },
     });
     return movies;
+  }
+
+  async listOrderedByPopulatiry(
+    direction: SortOrder,
+    limit?: number,
+  ): Promise<IMovieBanner[]> {
+    // double-check direction to prevent posibillity of sql injection
+    if (direction !== SortOrder.ASC && direction !== SortOrder.DESC)
+      throw new Error("Invalid direction");
+    let query = `
+        SELECT m.id, m.coverUrl from "Movie" m
+        LEFT JOIN "Review" r on r."movieId" = m.id
+        GROUP BY m.id, m.coverUrl
+        ORDER BY AVG(r.rating) ${direction}`;
+    const queryArgs = [];
+    if (limit !== undefined) {
+      query += " LIMIT $1";
+      queryArgs.push(limit);
+    }
+    const banners = await prisma.$queryRawUnsafe<IMovieBanner[]>(
+      query,
+      ...queryArgs,
+    );
+    return banners;
   }
 
   async getOne(id: number): Promise<IMovie> {
@@ -66,29 +105,15 @@ export class MoviesRepository {
     }
   }
 
-  async listRecommendedMovies(
-    watchedMoviesIds: number[],
+  async listByGenresExcludeByIds(
+    genresIds: number[],
+    excludeMoviesIds: number[],
   ): Promise<IMovieBanner[]> {
-    const genres = await prisma.genre.findMany({
-      where: {
-        movies: {
-          some: { id: { in: watchedMoviesIds } },
-        },
-      },
-      select: { id: true },
-    });
-
-    // Берем только ID жанров
-    const genreIds = genres.map((genre) => genre.id);
-
-    if (!genreIds.length) return [];
-
     return await prisma.movie.findMany({
       where: {
         AND: [
-          { genres: { some: { id: { in: genreIds } } } },
-          // Исключаем переданные фильмы, которые были переданы в recMovieIds
-          { id: { notIn: watchedMoviesIds } },
+          { genres: { some: { id: { in: genresIds } } } },
+          { id: { notIn: excludeMoviesIds } },
         ],
       },
       select: { id: true, coverUrl: true },
