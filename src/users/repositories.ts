@@ -15,17 +15,17 @@ export class UsersRepository {
         }
     }
     async findByEmail(email: string): Promise<User> {
-        return await this.findUnique({ email })
+        return await this.findUnique({ email });
     }
 
     async findById(id: number): Promise<User> {
-        return await this.findUnique({ id })
+        return await this.findUnique({ id });
     }
 
     async create(data: Prisma.UserCreateInput): Promise<User> {
         try {
             return await prisma.user.create({
-                data
+                data,
             });
         } catch (err) {
             if (getErrorCode(err) === ErrorCodes.AlreadyExists) {
@@ -36,10 +36,10 @@ export class UsersRepository {
     }
     async listFavoriteMovies(userId: number) {
         try {
-            const res = await prisma.user.findUniqueOrThrow({ where: { id: userId }, select: { favouriteMovies: true } })
-            return res.favouriteMovies
+            const res = await prisma.user.findUniqueOrThrow({ where: { id: userId }, select: { favouriteMovies: true } });
+            return res.favouriteMovies;
         } catch (err) {
-            if (getErrorCode(err) == ErrorCodes.NotFound) throw new NotFoundError()
+            if (getErrorCode(err) == ErrorCodes.NotFound) throw new NotFoundError();
             throw err;
         }
     }
@@ -54,6 +54,14 @@ export class UsersRepository {
         return updatedUser;
     }
     async list(): Promise<User[]> {
-        return await prisma.user.findMany({});
+        return await prisma.user.findMany();
+    }
+    async deleteById(userId: number): Promise<void> {
+        try {
+            await prisma.user.delete({ where: { id: userId } });
+        } catch (err) {
+            if (getErrorCode(err) == ErrorCodes.NotFound) throw new NotFoundError();
+            throw err;
+        }
     }
 }

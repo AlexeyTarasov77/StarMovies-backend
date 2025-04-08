@@ -14,7 +14,6 @@ import {
 import { AlreadyExistsError, NotFoundError } from "../core/repository";
 import { ListMoviesQuery } from "./types";
 import { SortOrder } from "../core/types";
-import { Movie } from "./types";
 import { InvalidCredentialsError } from "../users/services";
 import { Prisma } from "@prisma/client";
 
@@ -135,22 +134,22 @@ export class MoviesService {
     async addFavoriteMovie(movieId: number, userId: number): Promise<void> {
         try {
 
-            await this.moviesRepo.makeFavoriteForUser(movieId, userId)
+            await this.moviesRepo.makeFavoriteForUser(movieId, userId);
         } catch (err) {
-            if (err instanceof NotFoundError) throw new MovieNotFoundError(movieId)
-            if (err instanceof AlreadyExistsError) throw new MovieAlreadyInFavoritesError()
-            throw err
+            if (err instanceof NotFoundError) throw new MovieNotFoundError(movieId);
+            if (err instanceof AlreadyExistsError) throw new MovieAlreadyInFavoritesError();
+            throw err;
         }
     }
     async listFavoriteMovies(userId: number) {
         try {
-            return await this.usersRepo.listFavoriteMovies(userId)
+            return await this.usersRepo.listFavoriteMovies(userId);
         } catch (err) {
-            if (err instanceof NotFoundError) throw new InvalidCredentialsError()
+            if (err instanceof NotFoundError) throw new InvalidCredentialsError();
             throw err;
         }
     }
     async listCountries() {
-        return await this.countriesRepo.list()
+        return await this.countriesRepo.list();
     }
 }

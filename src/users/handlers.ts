@@ -14,12 +14,12 @@ export class UsersHandlers {
 
     public signUp = async (req: Request, res: Response) => {
         try {
-            const body = validateRequest(req, signUpSchema)
+            const body = validateRequest(req, signUpSchema);
             const data = await this.service.signUp(body);
 
             res.status(201).json(getSuccededResponse(data));
         } catch (err) {
-            if (err instanceof UserAlreadyExistsError) throw new HTTPConflictError(err.message)
+            if (err instanceof UserAlreadyExistsError) throw new HTTPConflictError(err.message);
             throw err;
         }
     };
@@ -27,16 +27,16 @@ export class UsersHandlers {
     public signIn = async (req: Request, res: Response) => {
         try {
             const body = validateRequest(req, signInSchema);
-            const token = await this.service.signIn(body)
+            const token = await this.service.signIn(body);
             res.json(getSuccededResponse(token));
         } catch (err) {
-            if (err instanceof InvalidCredentialsError) throw new HTTPUnauthorizedError(err.message)
+            if (err instanceof InvalidCredentialsError) throw new HTTPUnauthorizedError(err.message);
             throw err;
         }
     };
 
     public getUser = async (req: Request, res: Response) => {
-        const userId = requireAuthorized(res)
+        const userId = requireAuthorized(res);
         try {
             const user = await this.service.getUser(userId);
             res.status(200).json(getSuccededResponse(user));
@@ -51,35 +51,35 @@ export class UsersHandlers {
     };
 
     public getUserById = async (req: Request, res: Response) => {
-        requireAdmin(res)
+        requireAdmin(res);
         const userId = validateObjectId(req.params.id);
         try {
             const user = await this.service.getUser(userId);
             res.status(200).json(getSuccededResponse(user));
         } catch (err) {
             if (err instanceof InvalidCredentialsError) {
-                throw new HTTPNotFoundError("User not found")
+                throw new HTTPNotFoundError("User not found");
             }
             throw err;
         }
     };
 
     public createUser = async (req: Request, res: Response): Promise<void> => {
-        requireAdmin(res)
-        const body = validateRequest(req, createUserSchema)
+        requireAdmin(res);
+        const body = validateRequest(req, createUserSchema);
         try {
             const user = await this.service.createUser(body);
             res.status(200).json(getSuccededResponse(user));
         } catch (err) {
             if (err instanceof UserAlreadyExistsError) {
-                throw new HTTPConflictError(err.message)
+                throw new HTTPConflictError(err.message);
             }
             throw err;
         }
     };
     public updateUser = async (req: Request, res: Response): Promise<void> => {
-        const userId = validateObjectId(req.params.id)
-        const body = validateRequest(req, updateUserSchema)
+        const userId = validateObjectId(req.params.id);
+        const body = validateRequest(req, updateUserSchema);
         try {
             const user = await this.service.updateUser(
                 body,
@@ -88,8 +88,20 @@ export class UsersHandlers {
             res.status(200).json(getSuccededResponse(user));
         } catch (err) {
             if (err instanceof UserNotFoundError) {
-                throw new HTTPNotFoundError(err.message)
+                throw new HTTPNotFoundError(err.message);
             }
+            if (err instanceof UserAlreadyExistsError) throw new HTTPConflictError(err.message);
+            throw err;
+        }
+    };
+    public deleteUser = async (req: Request, res: Response): Promise<void> => {
+        requireAdmin(res);
+        const userId = validateObjectId(req.params.id);
+        try {
+            const user = await this.service.deleteUser(userId);
+            res.status(200).json(getSuccededResponse(user));
+        } catch (err) {
+            if (err instanceof UserNotFoundError) throw new HTTPNotFoundError(err.message);
             throw err;
         }
     };

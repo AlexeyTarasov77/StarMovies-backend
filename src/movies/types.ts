@@ -1,7 +1,7 @@
 import { Country, Prisma } from "@prisma/client";
 import { SortOrder } from "../core/types";
 import { listMoviesQuerySchema } from "./schemas";
-import { z } from "zod"
+import { z } from "zod";
 
 export type Movie = Prisma.MovieUncheckedCreateInput
 

@@ -4,16 +4,16 @@ import { UsersRepository } from "./repositories";
 import { UsersMiddlewares } from "./middlewares";
 
 export class Container {
-  handlers: UsersHandlers;
-  middlewares: UsersMiddlewares;
-  service: UsersService
+    handlers: UsersHandlers;
+    middlewares: UsersMiddlewares;
+    service: UsersService;
 
-  constructor() {
-    const usersRepo = new UsersRepository();
-    this.service = new UsersService(usersRepo);
-    this.handlers = new UsersHandlers(this.service);
-    this.middlewares = new UsersMiddlewares()
-  }
+    constructor() {
+        const usersRepo = new UsersRepository();
+        this.service = new UsersService(usersRepo);
+        this.handlers = new UsersHandlers(this.service);
+        this.middlewares = new UsersMiddlewares();
+    }
 }
 
 export const container = new Container();

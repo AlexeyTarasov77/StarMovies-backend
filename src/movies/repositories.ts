@@ -1,5 +1,5 @@
 import { IMovie, IMovieBanner, IGenre, IActor, IReview } from "./types";
-import { Country, Movie, Prisma } from "@prisma/client";
+import { Country, Prisma } from "@prisma/client";
 import { prisma, ErrorCodes, getErrorCode } from "../prisma";
 import { AlreadyExistsError, NotFoundError } from "../core/repository";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
@@ -212,17 +212,17 @@ export class MoviesRepository {
 
     async makeFavoriteForUser(movieId: number, userId: number): Promise<void> {
         try {
-            const res = await prisma.$executeRaw`INSERT INTO _MovieToUser(A, B) VALUES(${movieId}, ${userId})`
-            console.log("res", res)
+            const res = await prisma.$executeRaw`INSERT INTO _MovieToUser(A, B) VALUES(${movieId}, ${userId})`;
+            console.log("res", res);
         } catch (err) {
             if (getErrorCode(err) == "P2010") {
-                const prismaErr = (err as PrismaClientKnownRequestError)
-                const metaMsg = String(prismaErr.meta!['message']).toLowerCase()
-                if (metaMsg.includes("foreign key")) throw new NotFoundError()
-                if (metaMsg.includes("unique")) throw new AlreadyExistsError()
+                const prismaErr = (err as PrismaClientKnownRequestError);
+                const metaMsg = String(prismaErr.meta!["message"]).toLowerCase();
+                if (metaMsg.includes("foreign key")) throw new NotFoundError();
+                if (metaMsg.includes("unique")) throw new AlreadyExistsError();
                 throw err;
             }
-            throw err
+            throw err;
         }
     }
 }

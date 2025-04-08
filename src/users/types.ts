@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { z } from "zod"
+import { z } from "zod";
 import { createUserSchema, signInSchema, signUpSchema, updateUserSchema } from "./schemas";
 
 export interface IUsersRepo {
@@ -7,7 +7,7 @@ export interface IUsersRepo {
     getOne(userId: number): Promise<UserCreate>;
     createOne(data: Prisma.UserCreateInput): Promise<UserCreate>;
     updateOne(userId: number, data: Prisma.UserUpdateInput): Promise<UserCreate>;
-
+    deleteById(userId: number): Promise<void>;
 }
 
 export type AuthTokenPayload = { uid: number }
