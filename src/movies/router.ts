@@ -10,6 +10,7 @@ router.post("/add-favorite", container.handlers.addFavoriteMovie)
 router.get("/list-favorites", container.handlers.listFavoriteMovies)
 router.get("/genres/all", container.handlers.listGenres);
 router.get("/actors/all", container.handlers.listActors);
+router.get("/actors/countries", container.handlers.listCountries)
 router.get("/reviews/all", container.handlers.listReviews);
 
 export default router;

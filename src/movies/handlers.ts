@@ -84,4 +84,9 @@ export class MoviesHandlers {
     res.json(getSuccededResponse(movies))
   }
 
+  public listCountries = async (req: Request, res: Response) => {
+    const countries = await this.service.listCountries()
+    res.json(getSuccededResponse(countries))
+  }
+
 }

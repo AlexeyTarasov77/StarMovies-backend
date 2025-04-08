@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Country, Prisma } from "@prisma/client";
 import { SortOrder } from "../core/types";
 import { listMoviesQuerySchema } from "./schemas";
 import { z } from "zod"
@@ -74,6 +74,10 @@ export interface IUser {
 
 export interface IUsersRepo {
   listFavoriteMovies(userId: number): Promise<Movie[]>
+}
+
+export interface ICountriesRepo {
+  list(): Promise<Country[]>
 }
 
 export interface IMoviesRepo {

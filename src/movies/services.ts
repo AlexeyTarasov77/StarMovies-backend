@@ -9,6 +9,7 @@ import {
   IActorsRepo,
   IReviewsRepo,
   IUsersRepo,
+  ICountriesRepo,
 } from "./types";
 import { AlreadyExistsError, NotFoundError } from "../core/repository";
 import { ListMoviesQuery } from "./types";
@@ -35,6 +36,7 @@ export class MoviesService {
     public genresRepo: IGenresRepo,
     public actorsRepo: IActorsRepo,
     public reviewsRepo: IReviewsRepo,
+    public countriesRepo: ICountriesRepo,
   ) {
     this.moviesRepo = moviesRepo;
     this.genresRepo = genresRepo;
@@ -102,5 +104,8 @@ export class MoviesService {
       if (err instanceof NotFoundError) throw new InvalidCredentialsError()
       throw err;
     }
+  }
+  async listCountries() {
+    return await this.countriesRepo.list()
   }
 }

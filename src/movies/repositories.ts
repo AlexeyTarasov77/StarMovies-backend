@@ -1,5 +1,5 @@
 import { IMovie, IMovieBanner, IGenre, IActor, IReview } from "./types";
-import { Movie, Prisma } from "@prisma/client";
+import { Country, Movie, Prisma } from "@prisma/client";
 import { prisma, ErrorCodes, getErrorCode } from "../prisma";
 import { AlreadyExistsError, NotFoundError } from "../core/repository";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
@@ -133,4 +133,11 @@ export class MoviesRepository {
       throw err
     }
   }
+}
+
+export class CountriesRepository {
+  async list(): Promise<Country[]> {
+    return await prisma.country.findMany();
+  }
+
 }
