@@ -1,4 +1,14 @@
-import { IActor, IGenre, IMovie, IMovieBanner, IReview, IMoviesRepo, IGenresRepo, IActorsRepo, IReviewsRepo } from "./types";
+import {
+    IActor,
+    IGenre,
+    IMovie,
+    IMovieBanner,
+    IReview,
+    IMoviesRepo,
+    IGenresRepo,
+    IActorsRepo,
+    IReviewsRepo,
+} from "./types";
 import { NotFoundError } from "../core/repository";
 import { ListMoviesQuery } from "./schemas";
 import { SortOrder } from "../core/types";
@@ -58,6 +68,9 @@ export class MoviesService {
     ): Promise<IGenre> {
         return await this.genresRepo.updateOne(genreId, data);
     }
+    async deleteGenre(genreId: number): Promise<IGenre> {
+        return await this.genresRepo.deleteOne(genreId);
+    }
 
     async listActors(): Promise<IActor[]> {
         return await this.actorsRepo.list();
@@ -78,11 +91,14 @@ export class MoviesService {
         return await this.reviewsRepo.list();
     }
 
-  async listMovies(dto: ListMoviesQuery): Promise<IMovie[] | IMovieBanner[]> {
-    if (dto.filters.includes("mostPopular"))
-      return await this.moviesRepo.listOrderedByPopulatiry(SortOrder.DESC, dto.limit)
-    return await this.moviesRepo.list(dto.limit);
-  }
+    async listMovies(dto: ListMoviesQuery): Promise<IMovie[] | IMovieBanner[]> {
+        if (dto.filters.includes("mostPopular"))
+            return await this.moviesRepo.listOrderedByPopulatiry(
+                SortOrder.DESC,
+                dto.limit,
+            );
+        return await this.moviesRepo.list(dto.limit);
+    }
 
     async getMovie(movieId: number): Promise<IMovie> {
         try {
@@ -95,11 +111,15 @@ export class MoviesService {
         }
     }
 
-  async listRecommendedMovies(
-    watchedMoviesIds: number[],
-  ): Promise<IMovieBanner[]> {
-    const genresIds = await this.genresRepo.listIdsForMovies(watchedMoviesIds)
-    if (!genresIds.length) return []
-    return await this.moviesRepo.listByGenresExcludeByIds(genresIds, watchedMoviesIds);
-  }
+    async listRecommendedMovies(
+        watchedMoviesIds: number[],
+    ): Promise<IMovieBanner[]> {
+        const genresIds =
+            await this.genresRepo.listIdsForMovies(watchedMoviesIds);
+        if (!genresIds.length) return [];
+        return await this.moviesRepo.listByGenresExcludeByIds(
+            genresIds,
+            watchedMoviesIds,
+        );
+    }
 }

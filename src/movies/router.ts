@@ -12,6 +12,7 @@ router.get("/actors/all", container.handlers.listActors);
 router.get("/actors/:id", container.handlers.getActor);
 router.get("/reviews/all", container.handlers.listReviews);
 
+router.post("/genres/delete", container.handlers.deleteGenre)
 router.post("/genre/new", container.handlers.createGenre);
 router.post("/genre/updated/:id", container.handlers.updateGenre);
 

@@ -12,7 +12,7 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  reviews   Review[]
+  reviews   Review[] 
   role Role @default(USER)
   favouriteMovies Movie[]
 }

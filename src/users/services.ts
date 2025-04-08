@@ -16,7 +16,6 @@ export class UserAlreadyExist extends Error {
     }
 }
 
-
 export class UsersService {
     constructor(public usersRepo: IUsersRepo) {
         this.usersRepo = usersRepo;
@@ -48,30 +47,13 @@ export class UsersService {
     }
 
     async updateUser(
-            data: Prisma.UserUpdateInput,
-            userId: number,
-        ): Promise<IUser> {
-            return await this.usersRepo.updateOne(userId, data);
-        }
+        data: Prisma.UserUpdateInput,
+        userId: number,
+    ): Promise<IUser> {
+        return await this.usersRepo.updateOne(userId, data);
+    }
 
-    //   async authRegister(data: IUser) {
-    //     const user = await this.userRepo.createOne(data);
-    //     if (user) {
-    //       return { status: "error", message: "user exists" };
-    //     }
-    //     const hashedPassword = await hash(data.password, 10);
-    //     const hashedUserData = {
-    //       ...data,
-    //       password: hashedPassword,
-    //     };
-    //     const newUser = await this.userRepo.createOne(hashedUserData);
-    //     if (typeof newUser === "string") {
-    //       return { status: "error", message: "something wrong" };
-    //     }
-    //     if (!newUser) {
-    //       return { status: "error", message: "User wasn`t created successfully" };
-    //     }
-    //     const token = sign(String(newUser.id), SECRET_KEY, { expiresIn: "1d" });
-    //     return { status: "ok", data: token };
-    //   }
+    async deleteUser(userId: number): Promise<IUser>{
+        return await this.usersRepo.deleteOne(userId)
+    }
 }

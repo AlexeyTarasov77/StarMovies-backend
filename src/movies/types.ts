@@ -79,6 +79,7 @@ export interface IGenresRepo {
     list(): Promise<IGenre[]>;
     getOne(genreId: number): Promise<IGenre>;
     createOne(data: Prisma.GenreCreateInput): Promise<IGenre>;
+    deleteOne(genreId: number): Promise<IGenre>;
     updateOne(genreId: number, data: Prisma.GenreUpdateInput): Promise<IGenre>;
 }
 

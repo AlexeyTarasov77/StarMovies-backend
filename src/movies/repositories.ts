@@ -48,6 +48,15 @@ export class GenresRepository {
         });
         return updatedGenre;
     }
+    async deleteOne(id: number): Promise<IGenre> {
+        const genre = await prisma.genre.delete({
+            where: {
+                id: Number(id),
+            },
+        });
+
+        return genre;
+    }
 
     async listIdsForMovies(moviesIds: number[]): Promise<number[]> {
         const genres = await prisma.genre.findMany({

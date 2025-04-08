@@ -6,6 +6,7 @@ export interface IUsersRepo {
     getOne(userId: number): Promise<IUser>;
     createOne(data: Prisma.UserCreateInput): Promise<IUser>;
     updateOne(userId: number, data: Prisma.UserUpdateInput): Promise<IUser>;
+    deleteOne(userId: number):Promise<IUser>;
 
 }
 
