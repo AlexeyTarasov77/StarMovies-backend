@@ -11,21 +11,16 @@ export class GenresRepository {
     }
     async getOne(id: number): Promise<IGenre> {
         return await prisma.genre.findUniqueOrThrow({
-            where: {
-                id: id,
-            },
+            where: { id },
         });
     }
 
     async createOne(data: Prisma.GenreCreateInput): Promise<IGenre> {
         try {
-            return await prisma.genre.create({
-                data: data,
-            });
+            return await prisma.genre.create({ data });
         } catch (error) {
-            if (error instanceof Prisma.PrismaClientKnownRequestError) {
-                if (error.code === ErrorCodes.NotFound)
-                    throw new NotFoundError();
+            if (getErrorCode(error) === ErrorCodes.AlreadyExists) {
+                throw new AlreadyExistsError();
             }
             throw error;
         }
@@ -35,19 +30,25 @@ export class GenresRepository {
         id: number,
         data: Prisma.GenreUpdateInput,
     ): Promise<IGenre> {
-        const currentGenre = await prisma.genre.findUniqueOrThrow({
+        try {
+            const updatedGenre = await prisma.genre.update({
+                where: { id },
+                data,
+            });
+            return updatedGenre;
+        } catch (err) {
+            if (getErrorCode(err) === ErrorCodes.AlreadyExists) throw new AlreadyExistsError()
+            throw err
+        }
+    }
+    async deleteOne(id: number): Promise<IGenre> {
+        const genre = await prisma.genre.delete({
             where: {
-                id: id,
+                id: Number(id),
             },
         });
 
-        const updatedGenre = await prisma.genre.update({
-            where: {
-                id: currentGenre.id,
-            },
-            data,
-        });
-        return updatedGenre;
+        return genre;
     }
 
     async listIdsForMovies(moviesIds: number[]): Promise<number[]> {

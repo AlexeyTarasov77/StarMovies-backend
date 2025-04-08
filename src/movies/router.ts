@@ -15,7 +15,8 @@ router.get("/actors/countries", container.handlers.listCountries);
 router.get("/actors/:id", container.handlers.getActor);
 router.get("/reviews/all", container.handlers.listReviews);
 
+router.delete("/genres/delete", container.handlers.deleteGenre)
 router.post("/genre/new", container.handlers.createGenre);
-router.post("/genre/updated/:id", container.handlers.updateGenre);
+router.patch("/genre/updated/:id", container.handlers.updateGenre);
 
 export default router;

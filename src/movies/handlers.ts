@@ -50,30 +50,29 @@ export class MoviesHandlers {
         res.status(200).json(getSuccededResponse(actors));
     };
     public createGenre = async (req: Request, res: Response): Promise<void> => {
+        const genre = await this.service.createGenre(req.body);
+        res.status(200).json(getSuccededResponse(genre));
+    };
+    public updateGenre = async (req: Request, res: Response): Promise<void> => {
+        const genreId = validateObjectId(req.params.id)
         try {
-            const genre = await this.service.createOne(req.body);
-            res.status(200).json(genre);
+            const genre = await this.service.updateGenre(req.body, genreId);
+            res.status(200).json(getSuccededResponse(genre));
         } catch (err) {
             if (err instanceof GenreNotFoundError) {
-                res.status(404).json({ message: err.message });
-                return;
+                throw new HTTPNotFoundError(err.message);
             }
             throw err;
         }
     };
-    public updateGenre = async (req: Request, res: Response): Promise<void> => {
+    public deleteGenre = async (req: Request, res: Response): Promise<void> => {
+        const genreId = validateObjectId(req.params.id)
         try {
-            const genreId = Number(req.params.id);
-            if (isNaN(genreId)) {
-                res.status(400).json({ message: "Invalid genre ID" });
-                return;
-            }
-            const genre = await this.service.updateGenre(req.body, genreId);
-            res.status(200).json(genre);
+            const genre = await this.service.deleteGenre(genreId);
+            res.status(200).json(getSuccededResponse(genre));
         } catch (err) {
             if (err instanceof GenreNotFoundError) {
-                res.status(404).json({ message: err.message });
-                return;
+                throw new HTTPNotFoundError(err.message)
             }
             throw err;
         }
@@ -82,11 +81,10 @@ export class MoviesHandlers {
         const genreId = validateObjectId(req.params.id);
         try {
             const genre = await this.service.getGenre(genreId);
-            res.status(200).json(genre);
+            res.status(200).json(getSuccededResponse(genre));
         } catch (err) {
             if (err instanceof GenreNotFoundError) {
-                res.status(404).json({ message: err.message });
-                return;
+                throw new HTTPNotFoundError(err.message)
             }
             throw err;
         }
@@ -95,11 +93,10 @@ export class MoviesHandlers {
         const actorId = validateObjectId(req.params.id);
         try {
             const actor = await this.service.getActor(actorId);
-            res.status(200).json(actor);
+            res.status(200).json(getSuccededResponse(actor));
         } catch (err) {
             if (err instanceof ActorNotFoundError) {
-                res.status(404).json({ message: err.message });
-                return;
+                throw new HTTPNotFoundError(err.message)
             }
             throw err;
         }

@@ -71,14 +71,18 @@ export class MoviesService {
             throw err;
         }
     }
-    async createOne(data: Prisma.GenreCreateInput): Promise<IGenre> {
+    async createGenre(data: Prisma.GenreCreateInput): Promise<IGenre> {
         return await this.genresRepo.createOne(data);
     }
+
     async updateGenre(
         data: Prisma.GenreUpdateInput,
         genreId: number,
     ): Promise<IGenre> {
         return await this.genresRepo.updateOne(genreId, data);
+    }
+    async deleteGenre(genreId: number): Promise<IGenre> {
+        return await this.genresRepo.deleteOne(genreId);
     }
 
     async listActors(): Promise<IActor[]> {
@@ -131,7 +135,6 @@ export class MoviesService {
             watchedMoviesIds,
         );
     }
-
     async addFavoriteMovie(movieId: number, userId: number): Promise<void> {
         try {
             await this.moviesRepo.makeFavoriteForUser(movieId, userId);
