@@ -55,8 +55,9 @@ export class UsersService {
         try {
             user = await this.usersRepo.findByEmail(data.email);
         } catch (err) {
-            if (err instanceof NotFoundError) throw new InvalidCredentialsError();
-            throw err
+            if (err instanceof NotFoundError)
+                throw new InvalidCredentialsError();
+            throw err;
         }
         const isPasswordValid = await compare(data.password, user.password);
 

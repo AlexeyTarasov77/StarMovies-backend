@@ -37,7 +37,8 @@ export class GenresRepository {
             });
             return updatedGenre;
         } catch (err) {
-            if (getErrorCode(err) === ErrorCodes.AlreadyExists) throw new AlreadyExistsError();
+            if (getErrorCode(err) === ErrorCodes.AlreadyExists)
+                throw new AlreadyExistsError();
             throw err;
         }
     }

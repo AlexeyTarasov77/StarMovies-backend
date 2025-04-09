@@ -32,7 +32,8 @@ export class UsersHandlers {
 
             res.status(201).json(getSuccededResponse(data));
         } catch (err) {
-            if (err instanceof UserAlreadyExistsError) throw new HTTPConflictError(err.message);
+            if (err instanceof UserAlreadyExistsError)
+                throw new HTTPConflictError(err.message);
             throw err;
         }
     };

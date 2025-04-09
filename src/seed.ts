@@ -44,9 +44,9 @@ async function seedDatabase() {
                         }),
                         deathDate: faker.datatype.boolean()
                             ? faker.date.past({
-                                years: 20,
-                                refDate: new Date("2020-01-01"),
-                            })
+                                  years: 20,
+                                  refDate: new Date("2020-01-01"),
+                              })
                             : null,
                         countryId: country.id,
                     },
