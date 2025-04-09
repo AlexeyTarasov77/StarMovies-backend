@@ -54,7 +54,7 @@ export class MoviesHandlers {
         res.status(200).json(getSuccededResponse(genre));
     };
     public updateGenre = async (req: Request, res: Response): Promise<void> => {
-        const genreId = validateObjectId(req.params.id)
+        const genreId = validateObjectId(req.params.id);
         try {
             const genre = await this.service.updateGenre(req.body, genreId);
             res.status(200).json(getSuccededResponse(genre));
@@ -66,13 +66,13 @@ export class MoviesHandlers {
         }
     };
     public deleteGenre = async (req: Request, res: Response): Promise<void> => {
-        const genreId = validateObjectId(req.params.id)
+        const genreId = validateObjectId(req.params.id);
         try {
             const genre = await this.service.deleteGenre(genreId);
             res.status(200).json(getSuccededResponse(genre));
         } catch (err) {
             if (err instanceof GenreNotFoundError) {
-                throw new HTTPNotFoundError(err.message)
+                throw new HTTPNotFoundError(err.message);
             }
             throw err;
         }
@@ -84,7 +84,7 @@ export class MoviesHandlers {
             res.status(200).json(getSuccededResponse(genre));
         } catch (err) {
             if (err instanceof GenreNotFoundError) {
-                throw new HTTPNotFoundError(err.message)
+                throw new HTTPNotFoundError(err.message);
             }
             throw err;
         }
@@ -96,7 +96,7 @@ export class MoviesHandlers {
             res.status(200).json(getSuccededResponse(actor));
         } catch (err) {
             if (err instanceof ActorNotFoundError) {
-                throw new HTTPNotFoundError(err.message)
+                throw new HTTPNotFoundError(err.message);
             }
             throw err;
         }

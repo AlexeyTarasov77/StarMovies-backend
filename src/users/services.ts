@@ -51,11 +51,13 @@ export class UsersService {
     }
 
     async signIn(data: signInInput): Promise<string> {
-        const user = await this.usersRepo.findByEmail(data.email);
-        if (!user) {
-            throw new InvalidCredentialsError();
+        let user: User;
+        try {
+            user = await this.usersRepo.findByEmail(data.email);
+        } catch (err) {
+            if (err instanceof NotFoundError) throw new InvalidCredentialsError();
+            throw err
         }
-
         const isPasswordValid = await compare(data.password, user.password);
 
         if (!isPasswordValid) {

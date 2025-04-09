@@ -37,8 +37,8 @@ export class GenresRepository {
             });
             return updatedGenre;
         } catch (err) {
-            if (getErrorCode(err) === ErrorCodes.AlreadyExists) throw new AlreadyExistsError()
-            throw err
+            if (getErrorCode(err) === ErrorCodes.AlreadyExists) throw new AlreadyExistsError();
+            throw err;
         }
     }
     async deleteOne(id: number): Promise<IGenre> {
